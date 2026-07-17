@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trustra — DD Readiness Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-light: #122040;
+  --navy-mid: #1a2f55;
+  --silver: #8A9BB0;
+  --silver-light: #B8C6D6;
+  --silver-pale: #E8EDF4;
+  --gold: #C9A84C;
+  --gold-light: #E5C97A;
+  --white: #FFFFFF;
+  --red: #C0392B;
+  --red-light: #FADBD8;
+  --amber: #D68910;
+  --amber-light: #FDEBD0;
+  --green: #1E8449;
+  --green-light: #D5F5E3;
+  --blue: #1A5276;
+  --blue-light: #D6EAF8;
+  --border: rgba(138,155,176,0.2);
+  --border-strong: rgba(138,155,176,0.4);
+  --shadow: 0 4px 24px rgba(10,22,40,0.12);
+  --shadow-lg: 0 12px 48px rgba(10,22,40,0.2);
+  --radius: 4px;
+  --radius-lg: 8px;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .serif {
+  font-family: 'EB Garamond', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* ── SCREENS ── */
+.screen {
+  display: none;
+  min-height: 100vh;
+  animation: fadeIn 0.35s ease;
+}
+.screen.active { display: flex; flex-direction: column; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCREEN 1: LANDING ── */
+#screen-landing {
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+}
+
+#screen-landing::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+#screen-landing::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.landing-header {
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.02em;
+}
+
+.logo-word {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+
+.landing-badge {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  background: rgba(138,155,176,0.08);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+}
+
+.landing-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 48px 60px;
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 500;
+  line-height: 1.12;
+  color: var(--white);
+  margin-bottom: 20px;
+  max-width: 720px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: var(--silver-light);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 64px;
+  font-weight: 300;
+}
+
+.deal-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.deal-card {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.deal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform var(--transition);
+  transform-origin: left;
+}
+
+.deal-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.deal-card:hover::before { transform: scaleX(1); }
+
+.deal-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.deal-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.deal-desc {
+  font-size: 13px;
+  color: var(--silver);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.deal-count {
+  font-size: 11px;
+  color: var(--silver);
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+
+.deal-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  transition: gap var(--transition);
+}
+
+.deal-card:hover .deal-cta { gap: 12px; }
+
+.landing-footer {
+  padding: 24px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-standards {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.std-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--silver);
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(138,155,176,0.5);
+}
+
+/* ── SCREEN 2: COMPANY FORM ── */
+#screen-form {
+  background: var(--navy);
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 540px;
+  padding: 48px;
+}
+
+.form-header {
+  margin-bottom: 48px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--silver);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 32px;
+  transition: color var(--transition);
+}
+.back-btn:hover { color: var(--white); }
+
+.form-title {
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.form-sub {
+  font-size: 15px;
+  color: var(--silver);
+  font-weight: 300;
+}
+
+.form-group {
+  margin-bottom: 28px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 14px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition);
+  border-radius: var(--radius);
+}
+
+.form-input:focus { border-color: var(--gold); }
+.form-input::placeholder { color: rgba(138,155,176,0.5); }
+
+.deal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  color: var(--white);
+  font-size: 15px;
+}
+
+.deal-badge-icon { font-size: 18px; }
+
+.toggle-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.toggle-option {
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--silver);
+  transition: all var(--transition);
+  user-select: none;
+  border: none;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+}
+
+.toggle-option.active {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.begin-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  border-radius: var(--radius);
+}
+.begin-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+/* ── SCREEN 3: CHECKLIST ── */
+#screen-checklist {
+  background: var(--navy);
+  flex-direction: row;
+}
+
+.checklist-sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--navy-light);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sidebar-logo-mark {
+  width: 28px; height: 28px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo-word {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+
+.sidebar-company {
+  font-size: 12px;
+  color: var(--silver);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overall-progress {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--silver);
+}
+
+.progress-score {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  color: var(--gold);
+}
+
+.progress-bar-track {
+  height: 3px;
+  background: rgba(138,155,176,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.category-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.category-nav::-webkit-scrollbar { width: 4px; }
+.category-nav::-webkit-scrollbar-track { background: transparent; }
+.category-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.cat-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background var(--transition);
+  border-left: 2px solid transparent;
+}
+
+.cat-nav-item:hover { background: rgba(255,255,255,0.04); }
+.cat-nav-item.active { border-left-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+.cat-nav-info { flex: 1; min-width: 0; }
+
+.cat-nav-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.cat-nav-item.active .cat-nav-name { color: var(--gold-light); }
+
+.cat-nav-sub {
+  font-size: 11px;
+  color: var(--silver);
+}
+
+.cat-mini-bar {
+  width: 36px; height: 3px;
+  background: rgba(138,155,176,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cat-mini-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.view-results-btn {
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition);
+  border-radius: var(--radius);
+}
+.view-results-btn:hover { background: var(--gold); color: var(--navy); }
+
+/* Checklist Main */
+.checklist-main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.checklist-main::-webkit-scrollbar { width: 6px; }
+.checklist-main::-webkit-scrollbar-track { background: transparent; }
+.checklist-main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.checklist-top-bar {
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--navy);
+  z-index: 10;
+}
+
+.checklist-breadcrumb {
+  font-size: 12px;
+  color: var(--silver);
+}
+
+.checklist-nav-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--silver);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  border-radius: var(--radius);
+  letter-spacing: 0.04em;
+}
+.nav-btn:hover:not(:disabled) { border-color: var(--white); color: var(--white); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 600; }
+.nav-btn.primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+.checklist-content {
+  flex: 1;
+  padding: 40px;
+  max-width: 800px;
+}
+
+.category-header {
+  margin-bottom: 32px;
+}
+
+.category-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.category-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.category-meta {
+  font-size: 13px;
+  color: var(--silver);
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checklist-item {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  transition: border-color var(--transition);
+  border-radius: var(--radius);
+  margin-bottom: 6px;
+}
+
+.checklist-item:hover { border-color: var(--border-strong); }
+.checklist-item.status-have { border-left: 3px solid var(--green); }
+.checklist-item.status-missing { border-left: 3px solid var(--red); }
+.checklist-item.status-in_progress { border-left: 3px solid var(--amber); }
+.checklist-item.status-na { opacity: 0.5; }
+
+.item-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.item-info { flex: 1; }
+
+.item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.item-note {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.5;
+}
+
+.critical-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: var(--red-light);
+  padding: 3px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-selector {
+  display: flex;
+  gap: 4px;
+}
+
+.status-btn {
+  flex: 1;
+  padding: 7px 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--silver);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  border-radius: var(--radius);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status-btn:hover { background: rgba(255,255,255,0.06); border-color: var(--border-strong); }
+
+.status-btn.active-have { background: var(--green); border-color: var(--green); color: var(--white); }
+.status-btn.active-missing { background: var(--red); border-color: var(--red); color: var(--white); }
+.status-btn.active-in_progress { background: var(--amber); border-color: var(--amber); color: var(--white); }
+.status-btn.active-na { background: rgba(138,155,176,0.2); border-color: var(--border-strong); color: var(--silver-light); }
+
+/* ── SCREEN 4: RESULTS ── */
+#screen-results {
+  background: var(--navy);
+}
+
+.results-header {
+  padding: 28px 48px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.results-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.results-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.action-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--silver-light);
+}
+.action-btn.secondary:hover { border-color: var(--white); color: var(--white); }
+
+.action-btn.primary {
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+}
+.action-btn.primary:hover { background: var(--gold-light); }
+
+.results-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+.results-top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 60px;
+  margin-bottom: 56px;
+  align-items: center;
+}
+
+/* Score Gauge */
+.score-gauge-wrap {
+  text-align: center;
+}
+
+.score-gauge {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
+}
+
+.score-gauge svg {
+  transform: rotate(-90deg);
+}
+
+.score-gauge-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.score-number {
+  font-family: 'EB Garamond', serif;
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+
+.score-unit {
+  font-size: 18px;
+  color: var(--silver);
+  font-family: 'EB Garamond', serif;
+}
+
+.score-verdict {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Category Bars */
+.cat-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cat-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 48px;
+  align-items: center;
+  gap: 16px;
+}
+
+.cat-row-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+}
+
+.cat-bar-track {
+  height: 6px;
+  background: rgba(138,155,176,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cat-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.cat-bar-pct {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--silver-light);
+  text-align: right;
+}
+
+/* Results Sections */
+.results-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.result-section {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.result-section.critical { border-left: 3px solid var(--red); }
+.result-section.strengths { border-left: 3px solid var(--green); }
+.result-section.nice-to-have { border-left: 3px solid var(--amber); }
+
+.result-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-item-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-item {
+  font-size: 13px;
+  color: var(--silver-light);
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.result-item-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.critical .result-item-dot { background: var(--red); }
+.strengths .result-item-dot { background: var(--green); }
+.nice-to-have .result-item-dot { background: var(--amber); }
+
+.result-empty {
+  font-size: 13px;
+  color: rgba(138,155,176,0.5);
+  font-style: italic;
+}
+
+/* Full Summary Table */
+.summary-section {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.summary-title {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.summary-table th {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--silver);
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-table td {
+  padding: 11px 20px;
+  font-size: 13px;
+  color: var(--silver-light);
+  border-bottom: 1px solid rgba(138,155,176,0.08);
+  vertical-align: middle;
+}
+
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 12px;
+}
+
+.status-pill.have { background: var(--green-light); color: var(--green); }
+.status-pill.missing { background: var(--red-light); color: var(--red); }
+.status-pill.in_progress { background: var(--amber-light); color: var(--amber); }
+.status-pill.na { background: rgba(138,155,176,0.15); color: var(--silver); }
+.status-pill.none { background: rgba(138,155,176,0.08); color: rgba(138,155,176,0.5); }
+
+.crit-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  display: inline-block;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--navy-mid);
+  border: 1px solid var(--gold);
+  color: var(--white);
+  padding: 14px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── FAQ ── */
+.faq-section {
+  border-top: 1px solid var(--border);
+  background: var(--navy-light);
+  padding: 72px 48px;
+}
+
+.faq-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.faq-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.faq-sub {
+  font-size: 15px;
+  color: var(--silver);
+  font-weight: 300;
+  margin-bottom: 48px;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.faq-item {
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: border-color var(--transition);
+}
+
+.faq-item:hover { border-color: var(--border-strong); }
+
+.faq-q {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.faq-a {
+  font-size: 13px;
+  color: var(--silver-light);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.faq-a strong { color: var(--white); font-weight: 500; }
+.faq-a em { color: var(--gold-light); font-style: normal; }
+
+.score-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--silver-light);
+}
+
+.band-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.band-dot.red { background: var(--red); }
+.band-dot.amber { background: var(--amber); }
+.band-dot.blue { background: var(--blue); }
+.band-dot.green { background: var(--green); }
+
+@media (max-width: 700px) {
+  .faq-grid { grid-template-columns: 1fr; }
+  .faq-section { padding: 48px 24px; }
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; color: black; }
+  #screen-results { background: white; }
+  .results-header { display: none; }
+  .results-body { max-width: 100%; padding: 20px; }
+  .results-top { grid-template-columns: 1fr 2fr; gap: 30px; }
+  .score-number { color: var(--navy); }
+  .result-section, .summary-section { border: 1px solid #ddd; background: white; }
+  .summary-table td, .summary-table th { color: #333; }
+  .action-btn, .back-btn { display: none; }
+  .status-pill.have { background: #d5f5e3; color: #1e8449; }
+  .status-pill.missing { background: #fadbd8; color: #c0392b; }
+  .status-pill.in_progress { background: #fdebd0; color: #d68910; }
+  .cat-row-name { color: var(--navy); }
+  .result-item { color: #333; }
+  .cat-bar-fill { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .deal-cards { grid-template-columns: 1fr; max-width: 400px; }
+  .landing-hero { padding: 48px 24px 40px; }
+  .landing-header, .landing-footer { padding: 20px 24px; }
+  .footer-standards { display: none; }
+  .results-top { grid-template-columns: 1fr; }
+  .results-sections { grid-template-columns: 1fr; }
+  .cat-row { grid-template-columns: 140px 1fr 40px; }
+  .results-body { padding: 24px; }
+}
+
+@media (max-width: 700px) {
+  #screen-checklist { flex-direction: column; }
+  .checklist-sidebar { width: 100%; min-width: 0; max-height: 200px; }
+  .category-nav { display: flex; overflow-x: auto; padding: 4px; flex-direction: row; }
+  .cat-nav-item { min-width: 140px; border-left: none; border-bottom: 2px solid transparent; flex-direction: column; text-align: center; gap: 4px; padding: 8px; }
+  .cat-nav-item.active { border-bottom-color: var(--gold); border-left-color: transparent; }
+  .checklist-content { padding: 20px; }
+  .checklist-top-bar { padding: 14px 20px; }
+  .status-selector { flex-wrap: wrap; }
+  .status-btn { font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Screen 1: Landing -->
+<div id="screen-landing" class="screen active">
+  <header class="landing-header">
+    <a class="logo" href="#">
+      <div class="logo-mark">T</div>
+      <span class="logo-word">Trustra</span>
+    </a>
+    <span class="landing-badge">DD Readiness Platform</span>
+  </header>
+
+  <main class="landing-hero">
+    <p class="hero-eyebrow">Singapore · Series A · M&A · SGX</p>
+    <h1 class="hero-title">Know exactly what investors will ask for — <em>before they ask.</em></h1>
+    <p class="hero-sub">Trustra checks your data room against institutional investor standards for Singapore and international deals. Get a readiness score in minutes.</p>
+
+    <div class="deal-cards">
+      <div class="deal-card" onclick="selectDeal('series_a')">
+        <span class="deal-icon">📈</span>
+        <div class="deal-title">Series A Equity Raise</div>
+        <div class="deal-desc">Preparing for institutional VC or PE investment. Covers cap table, financials, legal and corporate governance.</div>
+        <div class="deal-count">6 categories · 48 items</div>
+        <div class="deal-cta">Start Check →</div>
+      </div>
+      <div class="deal-card" onclick="selectDeal('ma')">
+        <span class="deal-icon">🤝</span>
+        <div class="deal-title">M&A / Acquisition</div>
+        <div class="deal-desc">Preparing for a full acquisition or strategic merger. Deeper financial, legal and operational diligence.</div>
+        <div class="deal-count">6 categories · 45 items</div>
+        <div class="deal-cta">Start Check →</div>
+      </div>
+      <div class="deal-card" onclick="selectDeal('sgx')">
+        <span class="deal-icon">🏛️</span>
+        <div class="deal-title">SGX Listing</div>
+        <div class="deal-desc">Preparing for SGX Mainboard or Catalist listing. Includes MAS prospectus and SGX governance requirements.</div>
+        <div class="deal-count">5 categories · 38 items</div>
+        <div class="deal-cta">Start Check →</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="faq-title serif">How the score works</h2>
+      <p class="faq-sub">Trustra uses a weighted scoring model aligned to institutional investor due diligence standards.</p>
+      <div class="faq-grid">
+
+        <div class="faq-item">
+          <div class="faq-q">How is each document scored?</div>
+          <div class="faq-a">Each document is worth either <strong>2 points</strong> (Critical) or <strong>1 point</strong> (standard). Marking "Have it" earns full points. "In Progress" earns 40% of points. "Missing" earns 0. "N/A" removes the item from scoring entirely — it doesn't penalise you.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Why do Critical items count more?</div>
+          <div class="faq-a">Critical items are documents that investors will always request and that commonly delay or kill deals if missing — for example, IP assignment agreements, cap table, audited financials. They carry 2× weight to reflect their real-world impact on deal closure.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How is the overall score calculated?</div>
+          <div class="faq-a">Each category (e.g. Financials, Cap Table) has a pre-assigned weight that reflects its importance in the deal type. Your score per category is: <em>earned points ÷ max possible points × 100</em>. The overall score is the weighted average across all categories.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">What do the score bands mean?</div>
+          <div class="faq-a">
+            <div class="score-band"><span class="band-dot red"></span><strong>0–40 Not Ready</strong> — Significant gaps. Investors will pause or pass.</div>
+            <div class="score-band"><span class="band-dot amber"></span><strong>41–70 Getting There</strong> — Core documents present but gaps remain. Expect investor queries.</div>
+            <div class="score-band"><span class="band-dot blue"></span><strong>71–90 Almost Ready</strong> — Strong foundation. Minor items to address before closing.</div>
+            <div class="score-band"><span class="band-dot green"></span><strong>91–100 Investor Ready</strong> — Institutional-grade data room. Ready for serious due diligence.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">What checklist standards are used?</div>
+          <div class="faq-a"><strong>SG-focused</strong> items align to ACRA (Companies Act), IRAS (tax), MAS (regulatory), and MOM (employment) requirements. <strong>International</strong> items follow NVCA and institutional PE/VC DD frameworks used globally. <strong>Both</strong> is recommended for any SG company raising from international investors.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How are category weights assigned?</div>
+          <div class="faq-a">For Series A: Cap Table &amp; Equity 25%, Financials 25%, Corporate 20%, Legal 10%, Tax 10%, People 10%. For M&A: Financials 30%, Legal 20%, Corporate 15%, Tax 15%, People 10%, Technology 10%. Weights reflect what investors spend the most time on in each deal type.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can I share my results with an investor?</div>
+          <div class="faq-a">Yes. Click <strong>Copy Link</strong> on the results page — the full state of your assessment is encoded in the URL. Anyone with the link can view your exact readiness report. You can also click <strong>Download PDF</strong> to generate a printable report.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Is my data stored anywhere?</div>
+          <div class="faq-a">No. All data stays in your browser — nothing is sent to any server. Your progress is saved to local storage so you can continue later, and the shareable link encodes everything in the URL itself using base64.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="footer-standards">
+      <span class="std-tag">ACRA</span>
+      <span class="std-tag">MAS</span>
+      <span class="std-tag">IRAS</span>
+      <span class="std-tag">NVCA</span>
+      <span class="std-tag">SGX Rules</span>
+    </div>
+    <span class="footer-copy">© 2025 Trustra. Built for SG founders.</span>
+  </footer>
+</div>
+
+<!-- Screen 2: Company Form -->
+<div id="screen-form" class="screen">
+  <div class="form-container">
+    <div class="form-header">
+      <button class="back-btn" onclick="showScreen('landing')">← Back</button>
+      <h2 class="form-title serif">Start your assessment</h2>
+      <p class="form-sub">Tell us about your company and deal.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Company Name</label>
+      <input type="text" class="form-input" id="company-name-input" placeholder="e.g. Acme Pte. Ltd." />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Deal Type</label>
+      <div class="deal-badge">
+        <span class="deal-badge-icon" id="form-deal-icon"></span>
+        <span id="form-deal-label"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Checklist Standard</label>
+      <div class="toggle-group" id="standard-toggle">
+        <button class="toggle-option" data-val="sg" onclick="setStandard('sg')">SG-focused</button>
+        <button class="toggle-option" data-val="intl" onclick="setStandard('intl')">International</button>
+        <button class="toggle-option active" data-val="both" onclick="setStandard('both')">Both</button>
+      </div>
+    </div>
+
+    <button class="begin-btn" onclick="beginAssessment()">Begin Assessment →</button>
+  </div>
+</div>
+
+<!-- Screen 3: Checklist -->
+<div id="screen-checklist" class="screen">
+  <aside class="checklist-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-mark">T</div>
+        <span class="sidebar-logo-word">Trustra</span>
+      </div>
+      <div class="sidebar-company" id="sidebar-company-name"></div>
+    </div>
+    <div class="overall-progress">
+      <div class="progress-label">
+        <span class="progress-text">Readiness Score</span>
+        <span class="progress-score" id="sidebar-score">0</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="sidebar-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <nav class="category-nav" id="category-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="view-results-btn" onclick="showResults()">View Results →</button>
+    </div>
+  </aside>
+
+  <div class="checklist-main">
+    <div class="checklist-top-bar">
+      <span class="checklist-breadcrumb" id="checklist-breadcrumb"></span>
+      <div class="checklist-nav-btns">
+        <button class="nav-btn" id="prev-btn" onclick="prevCategory()">← Previous</button>
+        <button class="nav-btn primary" id="next-btn" onclick="nextCategory()">Next →</button>
+      </div>
+    </div>
+    <div class="checklist-content">
+      <div class="category-header">
+        <div class="category-eyebrow" id="cat-eyebrow"></div>
+        <h2 class="category-title serif" id="cat-title"></h2>
+        <div class="category-meta" id="cat-meta"></div>
+      </div>
+      <div class="items-list" id="items-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Screen 4: Results -->
+<div id="screen-results" class="screen">
+  <div class="results-header">
+    <div class="results-logo">
+      <div class="logo-mark">T</div>
+      <span class="logo-word" style="font-family:'EB Garamond',serif;font-size:20px;font-weight:500;color:var(--white);letter-spacing:0.04em;">Trustra</span>
+    </div>
+    <div class="results-actions">
+      <button class="action-btn secondary" onclick="goHome()">⌂ Home</button>
+      <button class="action-btn secondary" onclick="showScreen('checklist')">← Edit Responses</button>
+      <button class="action-btn secondary" id="share-btn" onclick="copyShareLink()">📎 Copy Link</button>
+      <button class="action-btn primary" onclick="window.print()">⬇ Download PDF</button>
+    </div>
+  </div>
+  <div class="results-body">
+    <div class="results-top">
+      <div class="score-gauge-wrap">
+        <div class="score-gauge">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle id="gauge-track" cx="100" cy="100" r="80" fill="none" stroke="rgba(138,155,176,0.12)" stroke-width="12"/>
+            <circle id="gauge-fill" cx="100" cy="100" r="80" fill="none" stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="502.65" stroke-dashoffset="502.65"
+              style="transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1), stroke 0.6s ease"/>
+          </svg>
+          <div class="score-gauge-label">
+            <div class="score-number" id="result-score-number">0</div>
+            <div class="score-verdict" id="result-verdict"></div>
+          </div>
+        </div>
+        <div id="result-company-name" style="font-size:14px;color:var(--silver);text-align:center"></div>
+        <div id="result-deal-type" style="font-size:12px;color:rgba(138,155,176,0.6);text-align:center;margin-top:4px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500"></div>
+      </div>
+
+      <div>
+        <h3 class="serif" style="font-size:22px;margin-bottom:20px;color:var(--white)">Readiness by Category</h3>
+        <div class="cat-breakdown" id="cat-breakdown"></div>
+      </div>
+    </div>
+
+    <div class="results-sections" id="results-sections"></div>
+
+    <div class="summary-section">
+      <div class="summary-title">Full Document Checklist</div>
+      <table class="summary-table" id="summary-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Document</th>
+            <th>Critical</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="summary-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── FULL CHECKLIST DATA ────────────────────────────────────────
+const CHECKLISTS = {
+  series_a: {
+    label: 'Series A Equity Raise',
+    icon: '📈',
+    categories: [
+      {
+        id: 'corporate', label: 'Corporate Documents', weight: 20,
+        items: [
+          { id: 'inc_cert', label: 'Certificate of Incorporation (ACRA)', critical: true, sg: true, intl: true, note: 'Must be original ACRA-issued certificate' },
+          { id: 'constitution', label: 'Memorandum & Articles of Association / Constitution', critical: true, sg: true, intl: true, note: 'Latest adopted version with all amendments' },
+          { id: 'biz_profile', label: 'ACRA Business Profile (BizFile+)', critical: true, sg: true, intl: false, note: 'Must be dated within 3 months' },
+          { id: 'dir_register', label: 'Register of Directors', critical: true, sg: true, intl: true, note: null },
+          { id: 'sh_register', label: 'Register of Members / Shareholders', critical: true, sg: true, intl: true, note: null },
+          { id: 'charges_reg', label: 'Register of Charges', critical: false, sg: true, intl: false, note: null },
+          { id: 'controllers', label: 'Register of Registrable Controllers (UBO)', critical: true, sg: true, intl: false, note: 'Required under ACRA since 2017' },
+          { id: 'board_res', label: 'Key Board Resolutions', critical: true, sg: true, intl: true, note: 'Fundraising approval, key hires, IP assignments' },
+          { id: 'agm_min', label: 'AGM / EGM Minutes (last 2 years)', critical: false, sg: true, intl: true, note: null },
+          { id: 'common_seal', label: 'Common Seal (if applicable)', critical: false, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'captable', label: 'Cap Table & Equity', weight: 25,
+        items: [
+          { id: 'captable', label: 'Cap Table (fully diluted, current)', critical: true, sg: true, intl: true, note: 'Must include options, warrants, convertible notes' },
+          { id: 'share_certs', label: 'Share Certificates (all issued)', critical: true, sg: true, intl: true, note: null },
+          { id: 'sha', label: 'Shareholders Agreement', critical: true, sg: true, intl: true, note: null },
+          { id: 'prior_inv', label: 'Prior Round Investment Agreements', critical: true, sg: true, intl: true, note: 'SAFEs, convertible notes, term sheets' },
+          { id: 'esop_plan', label: 'ESOP / Option Plan Document', critical: true, sg: true, intl: true, note: null },
+          { id: 'esop_grants', label: 'Option Grant Letters (all employees)', critical: false, sg: true, intl: true, note: null },
+          { id: 'vesting', label: 'Vesting Schedules (founders + key hires)', critical: true, sg: true, intl: true, note: 'Investors expect 4-year vesting with 1-year cliff' },
+          { id: 'rofr', label: 'Right of First Refusal / Co-Sale Agreements', critical: false, sg: true, intl: true, note: null },
+          { id: 'anti_dil', label: 'Anti-Dilution Provisions', critical: false, sg: true, intl: true, note: null },
+          { id: 'captable_model', label: 'Cap Table Model (post-round scenarios)', critical: true, sg: true, intl: true, note: null },
+        ]
+      },
+      {
+        id: 'financial', label: 'Financial Documents', weight: 25,
+        items: [
+          { id: 'audited_fs', label: 'Audited Financial Statements (2 years)', critical: true, sg: true, intl: true, note: 'Singapore FRS-compliant, signed by auditor' },
+          { id: 'mgmt_accs', label: 'Management Accounts (last 12 months)', critical: true, sg: true, intl: true, note: 'Monthly P&L, Balance Sheet, Cash Flow' },
+          { id: 'bank_stmts', label: 'Bank Statements (last 6 months)', critical: true, sg: true, intl: true, note: null },
+          { id: 'projections', label: 'Financial Projections (3–5 years)', critical: true, sg: true, intl: true, note: 'With assumptions tab, monthly for Year 1' },
+          { id: 'use_funds', label: 'Use of Funds Schedule', critical: true, sg: true, intl: true, note: null },
+          { id: 'debt_sched', label: 'Debt Schedule (all liabilities)', critical: false, sg: true, intl: true, note: null },
+          { id: 'ar_aging', label: 'Accounts Receivable Aging Report', critical: false, sg: true, intl: true, note: null },
+          { id: 'unit_econ', label: 'Unit Economics / Cohort Analysis', critical: true, sg: true, intl: true, note: 'CAC, LTV, payback period, churn' },
+        ]
+      },
+      {
+        id: 'tax', label: 'Tax & Regulatory', weight: 10,
+        items: [
+          { id: 'tax_assess', label: 'IRAS Tax Assessments (last 2 years)', critical: true, sg: true, intl: false, note: null },
+          { id: 'tax_returns', label: 'Corporate Tax Returns (ECI + C/C-S)', critical: true, sg: true, intl: false, note: null },
+          { id: 'gst_cert', label: 'GST Registration Certificate (if registered)', critical: false, sg: true, intl: false, note: null },
+          { id: 'gst_returns', label: 'GST F5 Returns (last 4 quarters)', critical: false, sg: true, intl: false, note: null },
+          { id: 'tax_comp', label: 'Tax Compliance Certificate', critical: false, sg: true, intl: false, note: null },
+          { id: 'tp_docs', label: 'Transfer Pricing Documentation (if applicable)', critical: false, sg: true, intl: true, note: null },
+          { id: 'grants', label: 'SEIS / Government Grants / Incentives', critical: false, sg: true, intl: false, note: 'EDB, EnterpriseSG grants, startup tax exemptions' },
+        ]
+      },
+      {
+        id: 'legal', label: 'Legal & Contracts', weight: 10,
+        items: [
+          { id: 'mat_contracts', label: 'Material Contracts (top 10 customers/suppliers)', critical: true, sg: true, intl: true, note: null },
+          { id: 'ip_assign', label: 'IP Assignment Agreements (founders + employees)', critical: true, sg: true, intl: true, note: 'Common deal-killer if missing' },
+          { id: 'ip_reg', label: 'IP Registrations (patents, trademarks)', critical: false, sg: true, intl: true, note: null },
+          { id: 'emp_contracts', label: 'Employment Contracts (key personnel)', critical: true, sg: true, intl: true, note: null },
+          { id: 'ndas', label: 'NDAs with key parties', critical: false, sg: true, intl: true, note: null },
+          { id: 'litigation', label: 'Litigation History / Legal Disputes', critical: true, sg: true, intl: true, note: 'Statutory declaration of no material litigation' },
+          { id: 'licenses', label: 'Business Licenses & Permits', critical: true, sg: true, intl: true, note: null },
+          { id: 'pdpa', label: 'PDPA Compliance Documentation', critical: false, sg: true, intl: false, note: 'Privacy policy, data protection officer if applicable' },
+        ]
+      },
+      {
+        id: 'people', label: 'People & Organization', weight: 10,
+        items: [
+          { id: 'org_chart', label: 'Organizational Chart', critical: true, sg: true, intl: true, note: null },
+          { id: 'founder_cvs', label: 'Founder / Key Person CVs & Backgrounds', critical: true, sg: true, intl: true, note: null },
+          { id: 'key_person', label: 'Key Person Agreements & Notice Periods', critical: false, sg: true, intl: true, note: null },
+          { id: 'ep_status', label: 'Employment Pass / Work Permit Status', critical: true, sg: true, intl: false, note: 'MOM compliance for all foreign staff' },
+          { id: 'cpf', label: 'CPF Contribution Records (compliance)', critical: false, sg: true, intl: false, note: null },
+        ]
+      }
+    ]
+  },
+
+  ma: {
+    label: 'M&A / Acquisition',
+    icon: '🤝',
+    categories: [
+      {
+        id: 'corporate', label: 'Corporate Documents', weight: 15,
+        items: [
+          { id: 'inc_cert', label: 'Certificate of Incorporation', critical: true, sg: true, intl: true, note: null },
+          { id: 'constitution', label: 'Constitution / Articles of Association', critical: true, sg: true, intl: true, note: null },
+          { id: 'biz_profile', label: 'ACRA Business Profile', critical: true, sg: true, intl: false, note: 'Dated within 3 months' },
+          { id: 'dir_register', label: 'Register of Directors', critical: true, sg: true, intl: true, note: null },
+          { id: 'sh_register', label: 'Register of Members', critical: true, sg: true, intl: true, note: null },
+          { id: 'controllers', label: 'Register of Registrable Controllers', critical: true, sg: true, intl: false, note: null },
+          { id: 'board_res', label: 'Board Resolutions (M&A approval)', critical: true, sg: true, intl: true, note: null },
+          { id: 'all_minutes', label: 'All Board & Shareholder Minutes (3 years)', critical: true, sg: true, intl: true, note: null },
+          { id: 'group_struct', label: 'Group / Subsidiary Structure Chart', critical: true, sg: true, intl: true, note: null },
+        ]
+      },
+      {
+        id: 'financial', label: 'Financial Documents', weight: 30,
+        items: [
+          { id: 'audited_fs', label: 'Audited Financial Statements (3 years)', critical: true, sg: true, intl: true, note: null },
+          { id: 'mgmt_accs', label: 'Management Accounts (YTD current year)', critical: true, sg: true, intl: true, note: null },
+          { id: 'bank_stmts', label: 'Bank Statements (12 months)', critical: true, sg: true, intl: true, note: null },
+          { id: 'working_cap', label: 'Working Capital Analysis', critical: true, sg: true, intl: true, note: null },
+          { id: 'debt_sched', label: 'Debt Schedule (all facilities + covenants)', critical: true, sg: true, intl: true, note: null },
+          { id: 'ebitda', label: 'Normalized EBITDA Bridge', critical: true, sg: true, intl: true, note: 'Key for valuation discussions' },
+          { id: 'capex', label: 'Capital Expenditure Schedule', critical: false, sg: true, intl: true, note: 'Historical and planned' },
+          { id: 'rev_breakdown', label: 'Revenue Breakdown by Customer / Product', critical: true, sg: true, intl: true, note: null },
+        ]
+      },
+      {
+        id: 'tax', label: 'Tax', weight: 15,
+        items: [
+          { id: 'tax_assess', label: 'Tax Assessments (3 years)', critical: true, sg: true, intl: false, note: null },
+          { id: 'tax_returns', label: 'Corporate Tax Returns (3 years)', critical: true, sg: true, intl: true, note: null },
+          { id: 'gst_returns', label: 'GST Returns (last 8 quarters)', critical: false, sg: true, intl: false, note: null },
+          { id: 'tax_disputes', label: 'Any IRAS / Tax Authority Disputes', critical: true, sg: true, intl: true, note: null },
+          { id: 'deferred_tax', label: 'Deferred Tax Positions', critical: false, sg: true, intl: true, note: null },
+          { id: 'tp_docs', label: 'Transfer Pricing Documentation', critical: false, sg: true, intl: true, note: null },
+        ]
+      },
+      {
+        id: 'legal', label: 'Legal & Contracts', weight: 20,
+        items: [
+          { id: 'mat_contracts', label: 'All Material Contracts (incl. change of control clauses)', critical: true, sg: true, intl: true, note: 'Check for CoC triggers' },
+          { id: 'cust_contracts', label: 'Top 20 Customer Contracts', critical: true, sg: true, intl: true, note: null },
+          { id: 'supplier_cont', label: 'Key Supplier / Vendor Contracts', critical: true, sg: true, intl: true, note: null },
+          { id: 'leases', label: 'Real Estate Leases & Property Documents', critical: true, sg: true, intl: true, note: null },
+          { id: 'ip_assign', label: 'IP Ownership & Assignment Chain', critical: true, sg: true, intl: true, note: null },
+          { id: 'litigation', label: 'Litigation / Arbitration History & Pending', critical: true, sg: true, intl: true, note: null },
+          { id: 'insurance', label: 'Insurance Policies (all active)', critical: false, sg: true, intl: true, note: null },
+          { id: 'reg_approvals', label: 'Regulatory Approvals & Licenses', critical: true, sg: true, intl: true, note: null },
+          { id: 'related_party', label: 'Related Party Transactions', critical: true, sg: true, intl: true, note: null },
+        ]
+      },
+      {
+        id: 'people', label: 'People & HR', weight: 10,
+        items: [
+          { id: 'org_chart', label: 'Full Organizational Chart', critical: true, sg: true, intl: true, note: null },
+          { id: 'emp_contracts', label: 'Employment Contracts (all key staff)', critical: true, sg: true, intl: true, note: null },
+          { id: 'retention', label: 'Key Person Retention / Lock-Up Agreements', critical: true, sg: true, intl: true, note: null },
+          { id: 'benefits', label: 'Employee Benefits & Pension Obligations', critical: false, sg: true, intl: true, note: null },
+          { id: 'ep_status', label: 'Foreign Staff Work Pass Compliance', critical: true, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'it', label: 'Technology & Data', weight: 10,
+        items: [
+          { id: 'it_systems', label: 'IT Systems Inventory', critical: false, sg: true, intl: true, note: null },
+          { id: 'pdpa', label: 'PDPA / Data Privacy Compliance', critical: true, sg: true, intl: true, note: null },
+          { id: 'cybersec', label: 'Cybersecurity Policies & Incident History', critical: false, sg: true, intl: true, note: null },
+          { id: 'sw_licenses', label: 'Software Licenses & Subscriptions', critical: false, sg: true, intl: true, note: null },
+        ]
+      }
+    ]
+  },
+
+  sgx: {
+    label: 'SGX Listing',
+    icon: '🏛️',
+    categories: [
+      {
+        id: 'corporate', label: 'Corporate Documents', weight: 15,
+        items: [
+          { id: 'inc_cert', label: 'Certificate of Incorporation', critical: true, sg: true, intl: false, note: null },
+          { id: 'constitution', label: 'Constitution (SGX-compliant)', critical: true, sg: true, intl: false, note: 'Must comply with SGX listing rules Chapter 4' },
+          { id: 'biz_profile', label: 'ACRA Business Profile', critical: true, sg: true, intl: false, note: null },
+          { id: 'group_struct', label: 'Group Structure Chart', critical: true, sg: true, intl: false, note: null },
+          { id: 'board_res', label: 'Board Resolutions (listing approval)', critical: true, sg: true, intl: false, note: null },
+          { id: 'controllers', label: 'Register of Registrable Controllers', critical: true, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'financial', label: 'Financial Documents', weight: 25,
+        items: [
+          { id: 'audited_fs', label: 'Audited Financial Statements (3 years, SGX rules)', critical: true, sg: true, intl: false, note: 'Must meet SGX Mainboard/Catalist financial entry criteria' },
+          { id: 'proforma_fs', label: 'Pro Forma Financial Statements', critical: true, sg: true, intl: false, note: null },
+          { id: 'working_cap', label: 'Working Capital Sufficiency Statement', critical: true, sg: true, intl: false, note: '12-month working capital sufficiency after listing' },
+          { id: 'profit_track', label: 'Profit Track Record Documentation', critical: true, sg: true, intl: false, note: 'Mainboard: S$30M pre-tax profit (3 years) or alternatives' },
+          { id: 'projections', label: 'Financial Projections (with auditor review)', critical: false, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'prospectus', label: 'Prospectus & Disclosure', weight: 25,
+        items: [
+          { id: 'draft_pros', label: 'Draft Prospectus / Offer Information Statement', critical: true, sg: true, intl: false, note: null },
+          { id: 'risk_factors', label: 'Risk Factors Disclosure', critical: true, sg: true, intl: false, note: null },
+          { id: 'use_proceeds', label: 'Use of Proceeds Statement', critical: true, sg: true, intl: false, note: null },
+          { id: 'biz_overview', label: 'Business Overview & Strategy', critical: true, sg: true, intl: false, note: null },
+          { id: 'mda', label: 'Management Discussion & Analysis (MD&A)', critical: true, sg: true, intl: false, note: null },
+          { id: 'industry_rep', label: 'Industry Report (from appointed research firm)', critical: false, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'governance', label: 'Corporate Governance', weight: 20,
+        items: [
+          { id: 'board_comp', label: 'Board Composition (independent directors)', critical: true, sg: true, intl: false, note: 'SGX requires at least 2 independent directors' },
+          { id: 'audit_comm', label: 'Audit Committee Charter & Members', critical: true, sg: true, intl: false, note: null },
+          { id: 'rem_comm', label: 'Remuneration Committee', critical: true, sg: true, intl: false, note: null },
+          { id: 'nom_comm', label: 'Nominating Committee', critical: true, sg: true, intl: false, note: null },
+          { id: 'cg_code', label: 'Singapore CG Code Compliance Report', critical: true, sg: true, intl: false, note: null },
+          { id: 'insider', label: 'Insider Trading Policy', critical: true, sg: true, intl: false, note: null },
+          { id: 'whistleblow', label: 'Whistleblowing Policy', critical: false, sg: true, intl: false, note: null },
+        ]
+      },
+      {
+        id: 'legal', label: 'Legal & Regulatory', weight: 15,
+        items: [
+          { id: 'mas_clear', label: 'MAS Prospectus Registration / Exemption', critical: true, sg: true, intl: false, note: null },
+          { id: 'sgx_elig', label: 'SGX Eligibility Letter', critical: true, sg: true, intl: false, note: null },
+          { id: 'ip_assign', label: 'IP Ownership Documentation', critical: true, sg: true, intl: false, note: null },
+          { id: 'mat_contracts', label: 'Material Contracts Disclosure', critical: true, sg: true, intl: false, note: null },
+          { id: 'litigation', label: 'Legal Proceedings Disclosure', critical: true, sg: true, intl: false, note: null },
+          { id: 'ipt', label: 'Interested Person Transactions (IPT) Policy', critical: true, sg: true, intl: false, note: null },
+        ]
+      }
+    ]
+  }
+};
+
+// ── STATE ──────────────────────────────────────────────────────
+let state = {
+  dealType: null,
+  companyName: '',
+  standard: 'both',
+  currentCategoryIdx: 0,
+  answers: {},  // { itemId: 'have'|'missing'|'in_progress'|'na' }
+};
+
+function getChecklist() {
+  return CHECKLISTS[state.dealType];
+}
+
+function getFilteredItems(category) {
+  if (state.standard === 'sg') return category.items.filter(i => i.sg);
+  if (state.standard === 'intl') return category.items.filter(i => i.intl);
+  return category.items;
+}
+
+function getCategories() {
+  return getChecklist()?.categories || [];
+}
+
+// ── SCORING ──────────────────────────────────────────────────
+function calcScore() {
+  const cats = getCategories();
+  if (!cats.length) return 0;
+
+  let totalWeightedScore = 0;
+  let totalWeight = 0;
+
+  for (const cat of cats) {
+    const items = getFilteredItems(cat);
+    if (!items.length) continue;
+
+    let catScore = 0;
+    let catMax = 0;
+
+    for (const item of items) {
+      const ans = state.answers[item.id] || 'none';
+      const itemWeight = item.critical ? 2 : 1;
+      catMax += itemWeight;
+
+      if (ans === 'have') catScore += itemWeight;
+      else if (ans === 'in_progress') catScore += itemWeight * 0.4;
+      else if (ans === 'na') catMax -= itemWeight; // exclude from scoring
+    }
+
+    const pct = catMax > 0 ? catScore / catMax : 0;
+    totalWeightedScore += pct * cat.weight;
+    totalWeight += cat.weight;
+  }
+
+  return totalWeight > 0 ? Math.round((totalWeightedScore / totalWeight) * 100) : 0;
+}
+
+function calcCatScore(cat) {
+  const items = getFilteredItems(cat);
+  let score = 0, max = 0;
+  for (const item of items) {
+    const ans = state.answers[item.id] || 'none';
+    const w = item.critical ? 2 : 1;
+    if (ans === 'na') continue;
+    max += w;
+    if (ans === 'have') score += w;
+    else if (ans === 'in_progress') score += w * 0.4;
+  }
+  return max > 0 ? Math.round((score / max) * 100) : 0;
+}
+
+function getVerdict(score) {
+  if (score >= 91) return { label: 'Investor Ready', color: 'var(--green)' };
+  if (score >= 71) return { label: 'Almost Ready', color: 'var(--blue)' };
+  if (score >= 41) return { label: 'Getting There', color: 'var(--amber)' };
+  return { label: 'Not Ready', color: 'var(--red)' };
+}
+
+function getCatBarColor(pct) {
+  if (pct >= 91) return 'var(--green)';
+  if (pct >= 71) return '#2980B9';
+  if (pct >= 41) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+// ── SCREEN MANAGEMENT ────────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
+
+// ── SCREEN 1 ─────────────────────────────────────────────────
+function selectDeal(type) {
+  state.dealType = type;
+  const deal = CHECKLISTS[type];
+  document.getElementById('form-deal-icon').textContent = deal.icon;
+  document.getElementById('form-deal-label').textContent = deal.label;
+  showScreen('form');
+}
+
+// ── SCREEN 2 ─────────────────────────────────────────────────
+function setStandard(val) {
+  state.standard = val;
+  document.querySelectorAll('.toggle-option').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === val);
+  });
+}
+
+function beginAssessment() {
+  const name = document.getElementById('company-name-input').value.trim();
+  state.companyName = name || 'Your Company';
+  state.currentCategoryIdx = 0;
+  renderChecklist();
+  showScreen('checklist');
+  saveStateToStorage();
+}
+
+// ── SCREEN 3 ─────────────────────────────────────────────────
+function renderChecklist() {
+  const cats = getCategories();
+  const score = calcScore();
+
+  // Sidebar
+  document.getElementById('sidebar-company-name').textContent = state.companyName + ' · ' + (CHECKLISTS[state.dealType]?.label || '');
+  document.getElementById('sidebar-score').textContent = score;
+  document.getElementById('sidebar-progress-fill').style.width = score + '%';
+
+  // Category nav
+  const nav = document.getElementById('category-nav');
+  nav.innerHTML = cats.map((cat, i) => {
+    const pct = calcCatScore(cat);
+    const items = getFilteredItems(cat);
+    const answered = items.filter(item => state.answers[item.id]).length;
+    return `<div class="cat-nav-item ${i === state.currentCategoryIdx ? 'active' : ''}" onclick="goToCategory(${i})">
+      <div class="cat-nav-info">
+        <div class="cat-nav-name">${cat.label}</div>
+        <div class="cat-nav-sub">${answered}/${items.length} answered</div>
+      </div>
+      <div class="cat-mini-bar"><div class="cat-mini-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  // Main content
+  const cat = cats[state.currentCategoryIdx];
+  const items = getFilteredItems(cat);
+  const critCount = items.filter(i => i.critical).length;
+
+  document.getElementById('cat-eyebrow').textContent = `Category ${state.currentCategoryIdx + 1} of ${cats.length} · ${cat.weight}% weight`;
+  document.getElementById('cat-title').textContent = cat.label;
+  document.getElementById('cat-meta').textContent = `${items.length} documents · ${critCount} critical`;
+  document.getElementById('checklist-breadcrumb').textContent = `${CHECKLISTS[state.dealType].label} › ${cat.label}`;
+
+  const list = document.getElementById('items-list');
+  list.innerHTML = items.map(item => {
+    const ans = state.answers[item.id] || 'none';
+    return `<div class="checklist-item ${ans !== 'none' ? 'status-' + ans : ''}" id="item-${item.id}">
+      <div class="item-top">
+        <div class="item-info">
+          <div class="item-name">${item.label}</div>
+          ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+        </div>
+        ${item.critical ? '<span class="critical-badge">Critical</span>' : ''}
+      </div>
+      <div class="status-selector">
+        <button class="status-btn ${ans === 'have' ? 'active-have' : ''}" onclick="setAnswer('${item.id}','have')">✓ Have it</button>
+        <button class="status-btn ${ans === 'missing' ? 'active-missing' : ''}" onclick="setAnswer('${item.id}','missing')">✗ Missing</button>
+        <button class="status-btn ${ans === 'in_progress' ? 'active-in_progress' : ''}" onclick="setAnswer('${item.id}','in_progress')">⋯ In Progress</button>
+        <button class="status-btn ${ans === 'na' ? 'active-na' : ''}" onclick="setAnswer('${item.id}','na')">N/A</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Nav buttons
+  document.getElementById('prev-btn').disabled = state.currentCategoryIdx === 0;
+  document.getElementById('next-btn').textContent = state.currentCategoryIdx === cats.length - 1 ? 'View Results →' : 'Next →';
+}
+
+function setAnswer(itemId, val) {
+  state.answers[itemId] = val;
+  const itemEl = document.getElementById('item-' + itemId);
+  if (itemEl) {
+    itemEl.className = 'checklist-item status-' + val;
+    itemEl.querySelectorAll('.status-btn').forEach(btn => {
+      btn.className = 'status-btn';
+      const btnVal = btn.textContent.includes('Have') ? 'have' : btn.textContent.includes('Missing') ? 'missing' : btn.textContent.includes('Progress') ? 'in_progress' : 'na';
+      if (btnVal === val) btn.classList.add('active-' + val);
+    });
+  }
+  // Update sidebar score
+  const score = calcScore();
+  document.getElementById('sidebar-score').textContent = score;
+  document.getElementById('sidebar-progress-fill').style.width = score + '%';
+  // Update nav mini bars
+  const cats = getCategories();
+  const navItems = document.querySelectorAll('.cat-nav-item');
+  navItems.forEach((el, i) => {
+    const cat = cats[i];
+    if (!cat) return;
+    const pct = calcCatScore(cat);
+    const fill = el.querySelector('.cat-mini-fill');
+    if (fill) fill.style.width = pct + '%';
+    const items = getFilteredItems(cat);
+    const answered = items.filter(item => state.answers[item.id]).length;
+    const sub = el.querySelector('.cat-nav-sub');
+    if (sub) sub.textContent = `${answered}/${items.length} answered`;
+  });
+  saveStateToStorage();
+}
+
+function goToCategory(idx) {
+  state.currentCategoryIdx = idx;
+  renderChecklist();
+}
+
+function prevCategory() {
+  if (state.currentCategoryIdx > 0) {
+    state.currentCategoryIdx--;
+    renderChecklist();
+  }
+}
+
+function nextCategory() {
+  const cats = getCategories();
+  if (state.currentCategoryIdx < cats.length - 1) {
+    state.currentCategoryIdx++;
+    renderChecklist();
+  } else {
+    showResults();
+  }
+}
+
+// ── SCREEN 4: RESULTS ────────────────────────────────────────
+function showResults() {
+  const score = calcScore();
+  const verdict = getVerdict(score);
+  const cats = getCategories();
+
+  document.getElementById('result-company-name').textContent = state.companyName;
+  document.getElementById('result-deal-type').textContent = CHECKLISTS[state.dealType]?.label || '';
+
+  // Animate score
+  const scoreEl = document.getElementById('result-score-number');
+  const fill = document.getElementById('gauge-fill');
+  fill.style.stroke = verdict.color;
+  const circumference = 502.65;
+  const offset = circumference - (score / 100) * circumference;
+  setTimeout(() => {
+    fill.style.strokeDashoffset = offset;
+    let n = 0;
+    const interval = setInterval(() => {
+      n = Math.min(n + 2, score);
+      scoreEl.textContent = n;
+      if (n >= score) clearInterval(interval);
+    }, 20);
+  }, 200);
+
+  document.getElementById('result-verdict').textContent = verdict.label;
+  document.getElementById('result-verdict').style.color = verdict.color;
+
+  // Category breakdown
+  const breakdown = document.getElementById('cat-breakdown');
+  breakdown.innerHTML = cats.map(cat => {
+    const pct = calcCatScore(cat);
+    return `<div class="cat-row">
+      <div class="cat-row-name">${cat.label}</div>
+      <div class="cat-bar-track"><div class="cat-bar-fill" style="width:0%;background:${getCatBarColor(pct)}" data-pct="${pct}"></div></div>
+      <div class="cat-bar-pct">${pct}%</div>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    document.querySelectorAll('.cat-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 300);
+
+  // Strengths / Critical Gaps / Nice to Have
+  const strengths = [], critGaps = [], niceToHave = [];
+  for (const cat of cats) {
+    for (const item of getFilteredItems(cat)) {
+      const ans = state.answers[item.id] || 'none';
+      if (ans === 'have') strengths.push({ ...item, catLabel: cat.label });
+      else if ((ans === 'missing' || ans === 'none') && item.critical) critGaps.push({ ...item, catLabel: cat.label });
+      else if ((ans === 'missing' || ans === 'none') && !item.critical) niceToHave.push({ ...item, catLabel: cat.label });
+    }
+  }
+
+  const renderItems = (arr, max = 8) =>
+    arr.length === 0
+      ? '<div class="result-empty">None</div>'
+      : `<ul class="result-item-list">${arr.slice(0, max).map(i =>
+          `<li class="result-item"><span class="result-item-dot"></span>${i.label}</li>`
+        ).join('')}${arr.length > max ? `<li class="result-item" style="color:var(--silver);font-style:italic">+${arr.length - max} more…</li>` : ''}</ul>`;
+
+  const sections = document.getElementById('results-sections');
+  sections.innerHTML = `
+    <div class="result-section critical" style="grid-column: span 2">
+      <div class="result-section-title">🔴 Critical Gaps (${critGaps.length})</div>
+      ${renderItems(critGaps, 10)}
+    </div>
+    <div class="result-section strengths">
+      <div class="result-section-title">✅ Strengths (${strengths.length})</div>
+      ${renderItems(strengths)}
+    </div>
+    <div class="result-section nice-to-have">
+      <div class="result-section-title">🟡 Nice to Have (${niceToHave.length})</div>
+      ${renderItems(niceToHave)}
+    </div>`;
+
+  // Summary table
+  const tbody = document.getElementById('summary-tbody');
+  const rows = [];
+  for (const cat of cats) {
+    for (const item of getFilteredItems(cat)) {
+      const ans = state.answers[item.id] || 'none';
+      rows.push(`<tr>
+        <td style="color:var(--silver);font-size:12px">${cat.label}</td>
+        <td>${item.label}</td>
+        <td>${item.critical ? '<span class="crit-dot"></span>' : ''}</td>
+        <td><span class="status-pill ${ans}">
+          ${ans === 'have' ? '✓ Have it' : ans === 'missing' ? '✗ Missing' : ans === 'in_progress' ? '⋯ In Progress' : ans === 'na' ? 'N/A' : '— Not answered'}
+        </span></td>
+      </tr>`);
+    }
+  }
+  tbody.innerHTML = rows.join('');
+
+  showScreen('results');
+  saveStateToHash();
+}
+
+// ── SHARE / PERSISTENCE ──────────────────────────────────────
+function saveStateToHash() {
+  const data = {
+    d: state.dealType,
+    c: state.companyName,
+    s: state.standard,
+    a: state.answers
+  };
+  try {
+    window.location.hash = btoa(JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadStateFromHash() {
+  try {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return false;
+    const data = JSON.parse(atob(hash));
+    state.dealType = data.d;
+    state.companyName = data.c;
+    state.standard = data.s || 'both';
+    state.answers = data.a || {};
+    return true;
+  } catch(e) { return false; }
+}
+
+function saveStateToStorage() {
+  try { localStorage.setItem('trustra_state', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadStateFromStorage() {
+  try {
+    const s = localStorage.getItem('trustra_state');
+    if (!s) return false;
+    const data = JSON.parse(s);
+    if (!data.dealType) return false;
+    state = { ...state, ...data };
+    return true;
+  } catch(e) { return false; }
+}
+
+function copyShareLink() {
+  saveStateToHash();
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    showToast('Link copied to clipboard');
+  }).catch(() => {
+    showToast('Copy: ' + window.location.href.slice(0, 60) + '…');
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+function goHome() {
+  state = { dealType: null, companyName: '', standard: 'both', currentCategoryIdx: 0, answers: {} };
+  try { localStorage.removeItem('trustra_state'); } catch(e) {}
+  window.location.hash = '';
+  showScreen('landing');
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  if (loadStateFromHash() && state.dealType) {
+    renderChecklist();
+    showResults();
+    return;
+  }
+  // Don't auto-redirect from localStorage — always start at landing
+  showScreen('landing');
+});
+</script>
+</body>
+</html>
