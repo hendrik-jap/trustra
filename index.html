@@ -177,10 +177,56 @@ h1, h2, h3, h4, .serif {
 .hero-sub {
   font-size: 17px;
   color: var(--silver-light);
-  max-width: 520px;
+  max-width: 560px;
   line-height: 1.7;
-  margin-bottom: 64px;
+  margin-bottom: 36px;
   font-weight: 300;
+}
+
+.tagline-strip {
+  display: flex;
+  align-items: center;
+  margin-bottom: 52px;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: var(--radius-lg);
+  padding: 20px 32px;
+  max-width: 860px;
+  width: 100%;
+}
+
+.tagline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  padding: 0 16px;
+}
+
+.tagline-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.tagline-text {
+  font-size: 13px;
+  color: var(--silver-light);
+  line-height: 1.5;
+  text-align: left;
+  font-weight: 300;
+}
+
+.tagline-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(201,168,76,0.2);
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .tagline-strip { flex-direction: column; padding: 20px; gap: 16px; }
+  .tagline-divider { width: 40px; height: 1px; }
+  .tagline-item { padding: 0; }
 }
 
 .deal-cards {
@@ -1214,7 +1260,24 @@ h1, h2, h3, h4, .serif {
   <main class="landing-hero">
     <p class="hero-eyebrow">Singapore · Series A · M&A · SGX</p>
     <h1 class="hero-title">Know exactly what investors will ask for — <em>before they ask.</em></h1>
-    <p class="hero-sub">Trustra checks your data room against institutional investor standards for Singapore and international deals. Get a readiness score in minutes.</p>
+    <p class="hero-sub">Startups lose deals not because their business is weak — but because their data room isn't ready. Trustra closes that gap in minutes.</p>
+
+    <div class="tagline-strip">
+      <div class="tagline-item">
+        <div class="tagline-icon">⏱</div>
+        <div class="tagline-text">Deals stall 4–12 weeks waiting for missing documents</div>
+      </div>
+      <div class="tagline-divider"></div>
+      <div class="tagline-item">
+        <div class="tagline-icon">📉</div>
+        <div class="tagline-text">Investors discount valuations when gaps surface in DD</div>
+      </div>
+      <div class="tagline-divider"></div>
+      <div class="tagline-item">
+        <div class="tagline-icon">🔒</div>
+        <div class="tagline-text">Institutional checklists were locked inside law firms — until now</div>
+      </div>
+    </div>
 
     <div class="deal-cards">
       <div class="deal-card" onclick="selectDeal('series_a')">
