@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trustra — DD Readiness Checker</title>
+<title>Trustra™ — DD Readiness Checker</title>
+<style>.tm { font-size: 0.55em; vertical-align: super; letter-spacing: 0; font-family: 'DM Sans', sans-serif; font-weight: 400; }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -1212,6 +1213,106 @@ h1, h2, h3, h4, .serif {
   .faq-section { padding: 48px 24px; }
 }
 
+/* ── ABOUT ── */
+.about-section {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  padding: 72px 48px;
+}
+
+.about-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.about-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 32px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 60px;
+  align-items: start;
+}
+
+.about-name {
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--heading);
+  margin-bottom: 12px;
+}
+
+.about-titles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.about-title-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-light);
+  border: 1px solid rgba(15,139,109,0.2);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+.about-bio {
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+.about-bio em { font-style: italic; color: var(--heading); }
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.about-stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.about-stat-number {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--teal);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.about-stat-label {
+  font-size: 11px;
+  color: var(--silver);
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+@media (max-width: 800px) {
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-section { padding: 48px 24px; }
+}
+
 /* ── PRINT ── */
 @media print {
   body { background: white; color: black; }
@@ -1263,7 +1364,7 @@ h1, h2, h3, h4, .serif {
   <header class="landing-header">
     <a class="logo" href="#">
       <div class="logo-mark">T</div>
-      <span class="logo-word">Trustra</span>
+      <span class="logo-word">Trustra<span class="tm">™</span></span>
     </a>
     <span class="landing-badge">DD Readiness Platform</span>
   </header>
@@ -1271,7 +1372,7 @@ h1, h2, h3, h4, .serif {
   <main class="landing-hero">
     <p class="hero-eyebrow">Singapore · Series A · M&A · SGX</p>
     <h1 class="hero-title">Know exactly what investors will ask for — <em>before they ask.</em></h1>
-    <p class="hero-sub">Startups lose deals not because their business is weak — but because their data room isn't ready. Trustra closes that gap in minutes.</p>
+    <p class="hero-sub">Startups lose deals not because their business is weak — but because their data room isn't ready. Trustra<span class="tm">™</span> closes that gap in minutes.</p>
 
     <div class="tagline-strip">
       <div class="tagline-item">
@@ -1319,7 +1420,7 @@ h1, h2, h3, h4, .serif {
   <section class="faq-section">
     <div class="faq-inner">
       <h2 class="faq-title serif">How the score works</h2>
-      <p class="faq-sub">Trustra uses a weighted scoring model aligned to institutional investor due diligence standards.</p>
+      <p class="faq-sub">Trustra<span class="tm">™</span> uses a weighted scoring model aligned to institutional investor due diligence standards.</p>
       <div class="faq-grid">
 
         <div class="faq-item">
@@ -1371,6 +1472,45 @@ h1, h2, h3, h4, .serif {
     </div>
   </section>
 
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="about-inner">
+      <div class="about-label">About the Creator</div>
+      <div class="about-grid">
+        <div class="about-text">
+          <h2 class="about-name serif">Hendrik Japarin</h2>
+          <div class="about-titles">
+            <span class="about-title-tag">FCCA</span>
+            <span class="about-title-tag">CA (Singapore)</span>
+            <span class="about-title-tag">CFO, Kacamatamoo</span>
+          </div>
+          <p class="about-bio">Hendrik is a finance executive operating at the intersection of strategy and execution. As CFO of Kacamatamoo — a vision care group with over 100 locations across ASEAN — he leads pre-IPO readiness, FP&amp;A, and investor relations for a business scaling fast across multiple jurisdictions.</p>
+          <p class="about-bio">He also serves as an Independent Director on the boards of several Singapore-incorporated firms, advising on governance, AI adoption, and finance transformation across companies at various stages of growth.</p>
+          <p class="about-bio">Beyond the group, he guest lectures at SMU (Singapore Management University) on venture capital mechanics. <em>ACCA's AB Magazine</em> has featured him twice — on the fractional CFO model in APAC, and on the rise of finance leadership in high-growth emerging market businesses. He was recently invited to speak as a panelist at the FutureCFO conference on sustainability and AI.</p>
+          <p class="about-bio">Trustra<span class="tm">™</span> was built from his firsthand experience seeing founders lose deals — not because their business was weak, but because their data room wasn't ready.</p>
+        </div>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-number">100+</div>
+            <div class="about-stat-label">ASEAN locations led as CFO</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">SMU</div>
+            <div class="about-stat-label">Guest lecturer, venture capital</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">2×</div>
+            <div class="about-stat-label">Featured in ACCA AB Magazine</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">FCCA</div>
+            <div class="about-stat-label">& CA (Singapore) qualified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="landing-footer">
     <div class="footer-standards">
       <span class="std-tag">ACRA</span>
@@ -1379,7 +1519,7 @@ h1, h2, h3, h4, .serif {
       <span class="std-tag">NVCA</span>
       <span class="std-tag">SGX Rules</span>
     </div>
-    <span class="footer-copy">© 2025 Trustra. Built for SG founders.</span>
+    <span class="footer-copy">© 2025 Trustra<span class="tm">™</span>. Built for SG founders.</span>
   </footer>
 </div>
 
@@ -1424,7 +1564,7 @@ h1, h2, h3, h4, .serif {
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <div class="sidebar-logo-mark">T</div>
-        <span class="sidebar-logo-word">Trustra</span>
+        <span class="sidebar-logo-word">Trustra<span class="tm">™</span></span>
       </div>
       <div class="sidebar-company" id="sidebar-company-name"></div>
     </div>
@@ -1467,7 +1607,7 @@ h1, h2, h3, h4, .serif {
   <div class="results-header">
     <div class="results-logo">
       <div class="logo-mark">T</div>
-      <span class="logo-word" style="font-family:'EB Garamond',serif;font-size:20px;font-weight:500;color:var(--white);letter-spacing:0.04em;">Trustra</span>
+      <span class="logo-word" style="font-family:'EB Garamond',serif;font-size:20px;font-weight:500;color:var(--white);letter-spacing:0.04em;">Trustra<span class="tm">™</span></span>
     </div>
     <div class="results-actions">
       <button class="action-btn secondary" onclick="goHome()">⌂ Home</button>
