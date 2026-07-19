@@ -3,690 +3,1226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trustra™ — DD Readiness Platform</title>
+<title>Trustra™ — Know What Investors Will Ask, Before They Ask</title>
 <style>.tm { font-size: 0.55em; vertical-align: super; letter-spacing: 0; font-family: 'DM Sans', sans-serif; font-weight: 400; }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #161A1D;
-  --silver: #6B7784;
-  --silver-light: #8A9199;
-  --gold: #D7A64A;
-  --white: #FFFFFF;
-  --bg: #F6F7F8;
-  --heading: #111111;
-  --body: #444444;
-  --teal: #0F8B6D;
-  --teal-light: #E6F7F3;
-  --red: #C0392B;
-  --red-light: #FDECEA;
-  --amber: #E3A008;
-  --amber-light: #FEF3D7;
-  --green: #2E9B62;
-  --green-light: #E6F7EE;
-  --blue: #1A5276;
-  --blue-light: #D6EAF8;
-  --border: #D6D9DD;
+  --navy:          #161A1D;
+  --navy-light:    #1F2428;
+  --white:         #FFFFFF;
+  --bg:            #F6F7F8;
+  --bg-alt:        #F0F2F4;
+  --heading:       #111111;
+  --body:          #444444;
+  --teal:          #0F8B6D;
+  --teal-light:    #E6F7F3;
+  --teal-mid:      #0D7A5F;
+  --gold:          #D7A64A;
+  --gold-light:    #FEF3D7;
+  --silver:        #6B7784;
+  --silver-light:  #8A9199;
+  --border:        #D6D9DD;
   --border-strong: #B0B5BB;
-  --shadow: 0 4px 24px rgba(22,26,29,0.08);
-  --shadow-lg: 0 12px 48px rgba(22,26,29,0.14);
-  --radius: 4px;
-  --radius-lg: 8px;
-  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  --green:         #2E9B62;
+  --green-light:   #E6F7EE;
+  --red:           #C0392B;
+  --red-light:     #FDECEA;
+  --amber:         #E3A008;
+  --shadow-sm:     0 2px 8px rgba(22,26,29,0.06);
+  --shadow:        0 4px 24px rgba(22,26,29,0.08);
+  --shadow-lg:     0 12px 48px rgba(22,26,29,0.14);
+  --shadow-xl:     0 24px 80px rgba(22,26,29,0.18);
+  --radius:        4px;
+  --radius-lg:     10px;
+  --radius-xl:     16px;
+  --transition:    0.22s cubic-bezier(0.4,0,0.2,1);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--bg);
+  background: var(--white);
   color: var(--body);
   min-height: 100vh;
-  font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, .serif {
   font-family: 'EB Garamond', Georgia, serif;
   letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
-/* ── NAV ── */
-.landing-header {
+/* ── NAVIGATION ── */
+.nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
   padding: 0 48px;
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: var(--white);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; flex-shrink: 0;
 }
-
 .logo-mark {
   width: 36px; height: 36px;
-  background: var(--teal);
+  background: var(--navy);
   color: var(--white);
   font-family: 'EB Garamond', serif;
-  font-size: 20px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 20px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px;
 }
-
 .logo-word {
   font-family: 'EB Garamond', serif;
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--heading);
-  letter-spacing: 0.04em;
+  font-size: 22px; font-weight: 500;
+  color: var(--heading); letter-spacing: 0.05em;
 }
 
-.site-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.nav-links {
+  display: flex; align-items: center; gap: 2px;
 }
-
 .nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--body);
-  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 14px;
+  font-size: 13.5px; font-weight: 500;
+  color: var(--body); text-decoration: none;
   border-radius: var(--radius);
   transition: background var(--transition), color var(--transition);
   white-space: nowrap;
 }
-
 .nav-link:hover { background: var(--bg); color: var(--heading); }
-.nav-link.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+.nav-link.active { color: var(--teal); font-weight: 600; background: var(--teal-light); }
 
-.nav-cta {
-  margin-left: 8px;
-  padding: 8px 18px;
-  background: var(--teal);
-  color: var(--white);
-  border-radius: var(--radius);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background var(--transition);
+.nav-btn {
+  margin-left: 10px;
+  padding: 9px 20px;
+  background: var(--navy); color: var(--white);
+  font-size: 13.5px; font-weight: 600;
+  text-decoration: none; border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
   white-space: nowrap;
 }
-.nav-cta:hover { background: #0d7a5f; }
+.nav-btn:hover { background: var(--navy-light); transform: translateY(-1px); }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
+  .nav { padding: 0 20px; }
   .nav-link span { display: none; }
-  .nav-link { padding: 8px 10px; }
-  .landing-header { padding: 0 20px; }
+  .nav-link { padding: 8px 10px; font-size: 16px; }
+  .nav-btn { padding: 8px 14px; font-size: 13px; margin-left: 6px; }
 }
 
 /* ── HERO ── */
 .hero {
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  padding: 80px 48px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 88px 48px 72px;
+}
+
+/* subtle texture */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 20% 50%, rgba(15,139,109,0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(215,166,74,0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.hero-grid-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-content {
+  position: relative; z-index: 1;
   text-align: center;
-  max-width: 1000px;
-  margin: 0 auto;
+  max-width: 780px;
   width: 100%;
 }
 
-.hero-eyebrow {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 24px;
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(15,139,109,0.15);
+  border: 1px solid rgba(15,139,109,0.3);
+  color: #4DD4AC;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 20px;
+  margin-bottom: 36px;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4DD4AC;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
 }
 
 .hero-title {
-  font-size: clamp(36px, 5vw, 62px);
+  font-size: clamp(38px, 5.5vw, 68px);
   font-weight: 500;
-  line-height: 1.1;
-  color: var(--heading);
-  margin-bottom: 22px;
-  max-width: 760px;
+  color: var(--white);
+  margin-bottom: 24px;
+  max-width: 720px;
 }
-
 .hero-title em {
   font-style: italic;
-  color: var(--teal);
+  color: #4DD4AC;
 }
 
 .hero-sub {
-  font-size: 17px;
-  color: var(--body);
-  max-width: 580px;
-  line-height: 1.7;
-  margin-bottom: 48px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.62);
+  max-width: 560px;
+  margin: 0 auto 48px;
   font-weight: 300;
+  line-height: 1.75;
 }
 
-/* ── TAGLINE STRIP ── */
-.tagline-strip {
-  display: flex;
-  align-items: center;
+.hero-ctas {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
   margin-bottom: 56px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 32px;
-  max-width: 880px;
-  width: 100%;
-  box-shadow: var(--shadow);
 }
 
-.tagline-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex: 1;
-  padding: 0 16px;
+.cta-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 32px;
+  background: var(--teal); color: var(--white);
+  font-size: 15px; font-weight: 600;
+  text-decoration: none; border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 0 0 0 rgba(15,139,109,0.4);
+  white-space: nowrap;
+}
+.cta-primary:hover {
+  background: var(--teal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(15,139,109,0.35);
+}
+.cta-primary .arrow { transition: transform var(--transition); }
+.cta-primary:hover .arrow { transform: translateX(4px); }
+
+.cta-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 28px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  font-size: 15px; font-weight: 500;
+  text-decoration: none; border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+.cta-secondary:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
 }
 
-.tagline-icon { font-size: 22px; flex-shrink: 0; }
-
-.tagline-text {
-  font-size: 13px;
-  color: var(--body);
-  line-height: 1.5;
-  text-align: left;
+.hero-social-proof {
+  display: flex; align-items: center; gap: 24px;
+  justify-content: center;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
+.social-proof-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: rgba(255,255,255,0.4);
   font-weight: 400;
 }
+.social-proof-item svg { opacity: 0.5; }
+.social-proof-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.12); }
 
-.tagline-divider {
-  width: 1px;
-  height: 44px;
-  background: var(--border);
-  flex-shrink: 0;
+/* ── HERO VISUAL ── */
+.hero-visual {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 920px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom: none;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 28px;
+  overflow: hidden;
 }
 
-@media (max-width: 700px) {
-  .tagline-strip { flex-direction: column; padding: 20px; gap: 16px; }
-  .tagline-divider { width: 44px; height: 1px; }
-  .tagline-item { padding: 0; }
+.hero-visual-bar {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 20px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: rgba(255,59,48,0.5); }
+.dot-y { background: rgba(255,204,0,0.5); }
+.dot-g { background: rgba(40,205,65,0.5); }
+.url-bar {
+  flex: 1; height: 26px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  display: flex; align-items: center; padding: 0 12px;
+  font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.02em;
 }
 
-/* ── DEAL CARDS ── */
-.deal-cards {
+.viz-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  height: 320px;
+}
+
+/* left sidebar preview */
+.viz-sidebar {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.viz-sidebar-header {
+  margin-bottom: 4px;
+}
+.viz-score-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.viz-score-label { font-size: 9px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; }
+.viz-score-val { font-family: 'EB Garamond', serif; font-size: 28px; color: #4DD4AC; line-height: 1; }
+
+.viz-prog-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-bottom: 14px; }
+.viz-prog-fill { height: 100%; border-radius: 2px; background: #4DD4AC; width: 72%; }
+
+.viz-cat-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.viz-cat-name { font-size: 10px; color: rgba(255,255,255,0.55); }
+.viz-cat-pct { font-size: 10px; font-weight: 600; color: #4DD4AC; }
+.viz-cat-item.amber .viz-cat-pct { color: #F59E0B; }
+.viz-cat-item.red .viz-cat-pct { color: #F87171; }
+
+/* right content preview */
+.viz-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.viz-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.viz-item.have { border-left: 2px solid #4DD4AC; }
+.viz-item.missing { border-left: 2px solid #F87171; }
+.viz-item.progress { border-left: 2px solid #F59E0B; }
+
+.viz-item-left { flex: 1; }
+.viz-item-name { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 3px; font-weight: 500; }
+.viz-item-note { font-size: 10px; color: rgba(255,255,255,0.3); }
+.viz-crit { font-size: 9px; font-weight: 600; color: #F87171; background: rgba(248,113,113,0.12); padding: 2px 7px; border-radius: 2px; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; }
+
+.viz-pill {
+  font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 10px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.viz-pill.have { background: rgba(77,212,172,0.15); color: #4DD4AC; }
+.viz-pill.missing { background: rgba(248,113,113,0.12); color: #F87171; }
+.viz-pill.progress { background: rgba(245,158,11,0.12); color: #F59E0B; }
+
+.hero-visual-fade {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, var(--navy));
+  pointer-events: none;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  background: var(--navy-light);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 28px 48px;
+}
+.stats-inner {
+  max-width: 1000px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 24px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  text-align: center;
+}
+.stat-item:last-child { border-right: none; }
+.stat-number { font-family: 'EB Garamond', serif; font-size: 36px; color: var(--white); line-height: 1; margin-bottom: 6px; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+/* ── SECTIONS SHARED ── */
+.section {
+  padding: 96px 48px;
+}
+.section-inner {
+  max-width: 1080px; margin: 0 auto;
+}
+.section-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(30px, 3.5vw, 46px);
+  font-weight: 500; color: var(--heading);
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+.section-sub {
+  font-size: 17px; color: var(--silver);
+  font-weight: 300; line-height: 1.75;
+  max-width: 520px;
+  margin-bottom: 56px;
+}
+
+/* ── FEATURES ── */
+.features-section { background: var(--white); }
+
+.features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  width: 100%;
-  max-width: 920px;
-}
-
-.deal-card {
-  background: var(--white);
+  gap: 2px;
+  background: var(--border);
   border: 1px solid var(--border);
-  padding: 36px 28px;
-  cursor: pointer;
-  transition: var(--transition);
-  text-align: left;
-  position: relative;
+  border-radius: var(--radius-xl);
   overflow: hidden;
+  margin-top: 56px;
+}
+
+.feature-card {
+  background: var(--white);
+  padding: 36px 32px;
+  transition: background var(--transition);
+}
+.feature-card:hover { background: var(--bg); }
+
+.feature-icon {
+  width: 48px; height: 48px;
+  background: var(--navy);
   border-radius: var(--radius-lg);
-  text-decoration: none;
-  display: block;
-}
-
-.deal-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--teal);
-  transform: scaleX(0);
-  transition: transform var(--transition);
-  transform-origin: left;
-}
-
-.deal-card:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.deal-card:hover::before { transform: scaleX(1); }
-
-.deal-icon { font-size: 28px; margin-bottom: 16px; display: block; }
-
-.deal-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--heading);
-  margin-bottom: 8px;
-}
-
-.deal-desc {
-  font-size: 13px;
-  color: var(--body);
-  line-height: 1.6;
-  margin-bottom: 24px;
-}
-
-.deal-count {
-  font-size: 11px;
-  color: var(--silver);
-  letter-spacing: 0.08em;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
-.deal-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--teal);
-  letter-spacing: 0.04em;
-  transition: gap var(--transition);
-}
-
-.deal-card:hover .deal-cta { gap: 12px; }
-
-/* ── FAQ ── */
-.faq-section {
-  border-top: 1px solid var(--border);
-  background: var(--white);
-  padding: 80px 48px;
-}
-
-.faq-inner {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.faq-title {
-  font-size: 34px;
-  font-weight: 500;
-  color: var(--heading);
-  margin-bottom: 10px;
-}
-
-.faq-sub {
-  font-size: 15px;
-  color: var(--silver);
-  font-weight: 300;
-  margin-bottom: 48px;
-}
-
-.faq-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.faq-item {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  transition: border-color var(--transition);
-}
-
-.faq-item:hover { border-color: var(--border-strong); }
-
-.faq-q {
+.feature-title {
   font-family: 'EB Garamond', serif;
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--heading);
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.faq-a {
-  font-size: 13px;
-  color: var(--body);
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-.faq-a strong { color: var(--heading); font-weight: 500; }
-.faq-a em { color: var(--teal); font-style: normal; }
-
-.score-band {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-size: 13px;
-  color: var(--silver);
-}
-
-.band-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.band-dot.red { background: var(--red); }
-.band-dot.amber { background: var(--amber); }
-.band-dot.blue { background: var(--blue); }
-.band-dot.green { background: var(--green); }
-
-@media (max-width: 700px) {
-  .faq-grid { grid-template-columns: 1fr; }
-  .faq-section { padding: 56px 24px; }
-}
-
-/* ── ABOUT ── */
-.about-section {
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-  padding: 80px 48px;
-}
-
-.about-inner {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.about-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 32px;
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 60px;
-  align-items: start;
-}
-
-.about-name {
-  font-size: 36px;
-  font-weight: 500;
+  font-size: 22px; font-weight: 500;
   color: var(--heading);
   margin-bottom: 12px;
 }
 
-.about-titles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
+.feature-desc {
+  font-size: 14px; color: var(--body);
+  line-height: 1.75; font-weight: 300;
 }
 
-.about-title-tag {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+.features-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  overflow: hidden;
+  margin-top: 2px;
+}
+.feature-card-wide { background: var(--white); padding: 32px 32px; }
+.feature-card-wide:hover { background: var(--bg); }
+
+.feature-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--teal);
-  background: var(--teal-light);
-  border: 1px solid rgba(15,139,109,0.2);
-  padding: 4px 10px;
-  border-radius: 2px;
-}
-
-.about-bio {
-  font-size: 14px;
-  color: var(--body);
-  line-height: 1.8;
-  font-weight: 300;
+  color: var(--teal); background: var(--teal-light);
+  padding: 5px 12px; border-radius: 20px;
   margin-bottom: 14px;
 }
 
-.about-bio em { font-style: italic; color: var(--heading); }
+/* ── TWO CTA CARDS ── */
+.tools-section { background: var(--bg); }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.tool-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  transition: transform var(--transition), box-shadow var(--transition);
+  position: relative;
+}
+.tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+
+.tool-card-dd { background: var(--navy); }
+.tool-card-val { background: var(--white); border: 1px solid var(--border); }
+
+.tool-card-body {
+  padding: 44px 40px;
+  position: relative;
+}
+
+.tool-card-dd .tool-card-body::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(15,139,109,0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.tool-card-val .tool-card-body::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(215,166,74,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.tool-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.tool-card-dd .tool-label { color: rgba(255,255,255,0.45); }
+.tool-card-val .tool-label { color: var(--silver); }
+
+.tool-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+.tool-card-dd .tool-icon-wrap { background: rgba(255,255,255,0.08); }
+.tool-card-val .tool-icon-wrap { background: var(--gold-light); }
+
+.tool-title {
+  font-size: 28px; font-weight: 500;
+  margin-bottom: 12px; line-height: 1.2;
+}
+.tool-card-dd .tool-title { color: var(--white); }
+.tool-card-val .tool-title { color: var(--heading); }
+
+.tool-desc {
+  font-size: 14px; line-height: 1.75; font-weight: 300;
+  margin-bottom: 32px;
+}
+.tool-card-dd .tool-desc { color: rgba(255,255,255,0.55); }
+.tool-card-val .tool-desc { color: var(--body); }
+
+.tool-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 36px;
+}
+.tool-chip {
+  font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 20px;
+}
+.tool-card-dd .tool-chip { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+.tool-card-val .tool-chip { background: var(--bg-alt); color: var(--silver); }
+
+.tool-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 24px; border-radius: var(--radius);
+  font-size: 14px; font-weight: 600;
+  transition: all var(--transition);
+}
+.tool-cta .arrow { transition: transform var(--transition); }
+.tool-card:hover .tool-cta .arrow { transform: translateX(4px); }
+
+.tool-card-dd .tool-cta { background: var(--teal); color: var(--white); }
+.tool-card-dd:hover .tool-cta { background: var(--teal-mid); }
+
+.tool-card-val .tool-cta { background: var(--navy); color: var(--white); }
+.tool-card-val:hover .tool-cta { background: var(--navy-light); }
+
+/* ── WHY TRUST ── */
+.trust-section { background: var(--white); }
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.trust-visual {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px;
+}
+
+.trust-score-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 28px;
+}
+.trust-score-left {}
+.trust-score-number {
+  font-family: 'EB Garamond', serif;
+  font-size: 72px; color: var(--heading); line-height: 1;
+  margin-bottom: 4px;
+}
+.trust-score-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal);
+}
+.trust-score-badge {
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 12px; font-weight: 600;
+  padding: 8px 14px; border-radius: var(--radius);
+  border: 1px solid rgba(46,155,98,0.2);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.trust-bars { display: flex; flex-direction: column; gap: 14px; }
+.trust-bar-row { display: grid; grid-template-columns: 130px 1fr 36px; align-items: center; gap: 12px; }
+.trust-bar-label { font-size: 13px; color: var(--body); font-weight: 400; }
+.trust-bar-track { height: 6px; background: rgba(138,155,176,0.15); border-radius: 3px; overflow: hidden; }
+.trust-bar-fill { height: 100%; border-radius: 3px; }
+.trust-bar-pct { font-size: 12px; font-weight: 600; color: var(--silver); text-align: right; }
+
+.trust-items {
+  display: flex; flex-direction: column; gap: 28px;
+  padding-right: 20px;
+}
+
+.trust-item { display: flex; gap: 20px; align-items: flex-start; }
+.trust-item-icon {
+  width: 40px; height: 40px; flex-shrink: 0;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.trust-item-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px; font-weight: 500;
+  color: var(--heading); margin-bottom: 6px;
+}
+.trust-item-desc {
+  font-size: 14px; color: var(--body);
+  font-weight: 300; line-height: 1.75;
+}
+
+/* ── ABOUT ── */
+.about-section { background: var(--bg); }
+
+.about-inner {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 20px;
+}
+
+.about-name {
+  font-size: clamp(38px, 4vw, 56px);
+  font-weight: 500; color: var(--heading);
+  margin-bottom: 14px;
+}
+
+.about-titles {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 28px;
+}
+.about-title-tag {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--navy); background: var(--white);
+  border: 1px solid var(--border);
+  padding: 5px 12px; border-radius: 2px;
+}
+
+.about-bio {
+  font-size: 15px; color: var(--body);
+  line-height: 1.85; font-weight: 300;
+  margin-bottom: 16px;
+}
+.about-bio strong { color: var(--heading); font-weight: 500; }
+.about-bio em { font-style: italic; }
+
+.about-quote {
+  margin-top: 28px;
+  padding: 20px 24px;
+  border-left: 3px solid var(--teal);
+  background: var(--white);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+.about-quote p {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px; font-style: italic;
+  color: var(--heading); line-height: 1.6;
+}
+.about-quote-attr { font-size: 12px; color: var(--silver); margin-top: 8px; font-style: normal; }
 
 .about-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
-
 .about-stat {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 20px 16px;
+  padding: 22px 18px;
   text-align: center;
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
-
+.about-stat:hover { border-color: var(--border-strong); box-shadow: var(--shadow); }
 .about-stat-number {
   font-family: 'EB Garamond', serif;
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--teal);
-  line-height: 1.1;
-  margin-bottom: 6px;
+  font-size: 32px; font-weight: 500;
+  color: var(--teal); line-height: 1;
+  margin-bottom: 8px;
 }
-
 .about-stat-label {
-  font-size: 11px;
-  color: var(--silver);
-  line-height: 1.4;
-  font-weight: 400;
+  font-size: 12px; color: var(--silver);
+  line-height: 1.5; font-weight: 400;
 }
 
-@media (max-width: 800px) {
-  .about-grid { grid-template-columns: 1fr; gap: 32px; }
-  .about-section { padding: 56px 24px; }
+.about-press {
+  margin-top: 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.about-press-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--silver);
+  margin-bottom: 14px;
+}
+.about-press-items { display: flex; flex-direction: column; gap: 10px; }
+.about-press-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--body); line-height: 1.5;
+}
+.press-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal); margin-top: 6px; flex-shrink: 0;
 }
 
 /* ── FOOTER ── */
-.landing-footer {
-  padding: 24px 48px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--white);
+.footer {
+  background: var(--navy);
+  padding: 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
-
+.footer-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+.footer-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.footer-logo-mark {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: 'EB Garamond', serif;
+  font-size: 18px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px;
+}
+.footer-logo-word {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px; font-weight: 500;
+  color: rgba(255,255,255,0.8); letter-spacing: 0.05em;
+}
 .footer-standards {
-  display: flex;
-  align-items: center;
-  gap: 24px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
 }
-
-.std-tag {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--silver);
-}
-
-.footer-copy { font-size: 12px; color: var(--silver); }
+.footer-std { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+.footer-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .deal-cards { grid-template-columns: 1fr; max-width: 400px; }
-  .hero { padding: 56px 24px 48px; }
+@media (max-width: 1000px) {
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .features-bottom { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; gap: 40px; }
+  .trust-items { padding-right: 0; }
+}
+
+@media (max-width: 800px) {
+  .section { padding: 64px 24px; }
+  .stats-strip { padding: 24px; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .stat-item { border-right: none; padding: 0; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero { padding: 56px 24px 0; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .viz-grid { grid-template-columns: 1fr; height: auto; }
+  .viz-sidebar { max-height: 180px; overflow: hidden; }
+  .features-grid { grid-template-columns: 1fr; }
+  .footer { padding: 32px 24px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-standards { display: none; }
-  .landing-footer { padding: 20px 24px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 32px; }
+  .cta-primary, .cta-secondary { width: 100%; justify-content: center; }
+  .hero-social-proof { display: none; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<header class="landing-header">
+<!-- NAV -->
+<nav class="nav">
   <a class="logo" href="index.html">
     <div class="logo-mark">T</div>
     <span class="logo-word">Trustra<span class="tm">™</span></span>
   </a>
-  <nav class="site-nav">
-    <a class="nav-link active" href="index.html">🏠 <span>Home</span></a>
-    <a class="nav-link" href="checklist.html">📋 <span>DD Checklist</span></a>
-    <a class="nav-link nav-cta" href="valuation.html">📊 Valuation</a>
-  </nav>
-</header>
+  <div class="nav-links">
+    <a class="nav-link active" href="index.html">Home</a>
+    <a class="nav-link" href="checklist.html">DD Checklist</a>
+    <a class="nav-link" href="valuation.html">Valuation</a>
+    <a class="nav-btn" href="checklist.html">Get Started →</a>
+  </div>
+</nav>
 
-<main class="hero">
-  <p class="hero-eyebrow">Singapore · Series A · M&amp;A · SGX</p>
-  <h1 class="hero-title">Know exactly what investors will ask for — <em>before they ask.</em></h1>
-  <p class="hero-sub">Startups lose deals not because their business is weak — but because their data room isn't ready. Trustra<span class="tm">™</span> closes that gap in minutes.</p>
-
-  <div class="tagline-strip">
-    <div class="tagline-item">
-      <div class="tagline-icon">⏱</div>
-      <div class="tagline-text">Deals stall 4–12 weeks waiting for missing documents</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Built for SG founders · Series A · M&amp;A · SGX
     </div>
-    <div class="tagline-divider"></div>
-    <div class="tagline-item">
-      <div class="tagline-icon">📉</div>
-      <div class="tagline-text">Investors discount valuations when gaps surface in DD</div>
+    <h1 class="hero-title serif">Know what investors will ask for — <em>before they ask.</em></h1>
+    <p class="hero-sub">Startups lose deals not because their business is weak — but because their data room isn't ready. Trustra<span class="tm">™</span> closes that gap in minutes.</p>
+    <div class="hero-ctas">
+      <a class="cta-primary" href="checklist.html">
+        Check Your DD Readiness <span class="arrow">→</span>
+      </a>
+      <a class="cta-secondary" href="valuation.html">
+        📊 Run Valuation
+      </a>
     </div>
-    <div class="tagline-divider"></div>
-    <div class="tagline-item">
-      <div class="tagline-icon">🔒</div>
-      <div class="tagline-text">Institutional checklists were locked inside law firms — until now</div>
+    <div class="hero-social-proof">
+      <span class="social-proof-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5.5H13L9.5 8L11 12.5L7 10L3 12.5L4.5 8L1 5.5H5.5L7 1Z" fill="white"/></svg>
+        Aligned to ACRA, MAS &amp; IRAS standards
+      </span>
+      <span class="social-proof-divider"></span>
+      <span class="social-proof-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="white" stroke-width="1.5"/><path d="M5 7L6.5 8.5L9 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        No data stored — stays in your browser
+      </span>
+      <span class="social-proof-divider"></span>
+      <span class="social-proof-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="white" stroke-width="1.5"/><path d="M7 4.5V7.5L8.5 9" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Assessment completed in under 15 minutes
+      </span>
     </div>
   </div>
 
-  <div class="deal-cards" id="deal-section">
-    <a class="deal-card" href="checklist.html?deal=series_a">
-      <span class="deal-icon">📈</span>
-      <div class="deal-title">Series A Equity Raise</div>
-      <div class="deal-desc">Preparing for institutional VC or PE investment. Covers cap table, financials, legal and corporate governance.</div>
-      <div class="deal-count">6 categories · 48 items</div>
-      <div class="deal-cta">Start Check →</div>
-    </a>
-    <a class="deal-card" href="checklist.html?deal=ma">
-      <span class="deal-icon">🤝</span>
-      <div class="deal-title">M&amp;A / Acquisition</div>
-      <div class="deal-desc">Preparing for a full acquisition or strategic merger. Deeper financial, legal and operational diligence.</div>
-      <div class="deal-count">6 categories · 45 items</div>
-      <div class="deal-cta">Start Check →</div>
-    </a>
-    <a class="deal-card" href="checklist.html?deal=sgx">
-      <span class="deal-icon">🏛️</span>
-      <div class="deal-title">SGX Listing</div>
-      <div class="deal-desc">Preparing for SGX Mainboard or Catalist listing. Includes MAS prospectus and SGX governance requirements.</div>
-      <div class="deal-count">5 categories · 38 items</div>
-      <div class="deal-cta">Start Check →</div>
-    </a>
+  <!-- App Preview -->
+  <div class="hero-visual">
+    <div class="hero-visual-bar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <div class="url-bar">hendrik-jap.github.io/trustra/checklist.html</div>
+    </div>
+    <div class="viz-grid">
+      <!-- Sidebar -->
+      <div class="viz-sidebar">
+        <div class="viz-sidebar-header">
+          <div class="viz-score-row">
+            <span class="viz-score-label">Readiness Score</span>
+            <span class="viz-score-val">72</span>
+          </div>
+          <div class="viz-prog-bar"><div class="viz-prog-fill"></div></div>
+        </div>
+        <div class="viz-cat-item"><span class="viz-cat-name">Corporate Docs</span><span class="viz-cat-pct">90%</span></div>
+        <div class="viz-cat-item"><span class="viz-cat-name">Cap Table</span><span class="viz-cat-pct">85%</span></div>
+        <div class="viz-cat-item amber"><span class="viz-cat-name">Financials</span><span class="viz-cat-pct">64%</span></div>
+        <div class="viz-cat-item red"><span class="viz-cat-name">Legal</span><span class="viz-cat-pct">40%</span></div>
+        <div class="viz-cat-item amber"><span class="viz-cat-name">Tax</span><span class="viz-cat-pct">55%</span></div>
+      </div>
+      <!-- Main Content -->
+      <div class="viz-main">
+        <div class="viz-item have">
+          <div class="viz-item-left">
+            <div class="viz-item-name">Audited Financial Statements (2 years)</div>
+            <div class="viz-item-note">Singapore FRS-compliant, signed by auditor</div>
+          </div>
+          <span class="viz-crit">Critical</span>
+          <span class="viz-pill have">✓ Have it</span>
+        </div>
+        <div class="viz-item progress">
+          <div class="viz-item-left">
+            <div class="viz-item-name">Cap Table (fully diluted, current)</div>
+            <div class="viz-item-note">Must include options, warrants, convertible notes</div>
+          </div>
+          <span class="viz-crit">Critical</span>
+          <span class="viz-pill progress">⋯ In Progress</span>
+        </div>
+        <div class="viz-item missing">
+          <div class="viz-item-left">
+            <div class="viz-item-name">IP Assignment Agreements (founders + employees)</div>
+            <div class="viz-item-note">Common deal-killer if missing</div>
+          </div>
+          <span class="viz-crit">Critical</span>
+          <span class="viz-pill missing">✗ Missing</span>
+        </div>
+        <div class="viz-item have">
+          <div class="viz-item-left">
+            <div class="viz-item-name">ACRA Business Profile (BizFile+)</div>
+            <div class="viz-item-note">Must be dated within 3 months</div>
+          </div>
+          <span class="viz-pill have">✓ Have it</span>
+        </div>
+        <div class="viz-item have">
+          <div class="viz-item-left">
+            <div class="viz-item-name">Shareholders Agreement</div>
+            <div class="viz-item-note"></div>
+          </div>
+          <span class="viz-crit">Critical</span>
+          <span class="viz-pill have">✓ Have it</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual-fade"></div>
   </div>
-</main>
+</section>
 
-<!-- FAQ Section -->
-<section class="faq-section">
-  <div class="faq-inner">
-    <h2 class="faq-title serif">How the score works</h2>
-    <p class="faq-sub">Trustra<span class="tm">™</span> uses a weighted scoring model aligned to institutional investor due diligence standards.</p>
-    <div class="faq-grid">
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-number">131</div>
+      <div class="stat-label">DD documents covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Deal types supported</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">&lt;15</div>
+      <div class="stat-label">Minutes to complete</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Data stored externally</div>
+    </div>
+  </div>
+</div>
 
-      <div class="faq-item">
-        <div class="faq-q">How is each document scored?</div>
-        <div class="faq-a">Each document is worth either <strong>2 points</strong> (Critical) or <strong>1 point</strong> (standard). Marking "Have it" earns full points. "In Progress" earns 40% of points. "Missing" earns 0. "N/A" removes the item from scoring entirely — it doesn't penalise you.</div>
+<!-- FEATURES -->
+<section class="section features-section">
+  <div class="section-inner">
+    <div class="section-eyebrow">What Trustra™ Does</div>
+    <h2 class="section-title serif">Everything you need to walk into DD with confidence</h2>
+    <p class="section-sub">From document readiness to valuation benchmarking — built specifically for Singapore founders preparing for institutional scrutiny.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Institutional-Grade Checklist</div>
+        <div class="feature-desc">131 documents across Series A, M&A, and SGX listing — mapped to ACRA, MAS, IRAS, and NVCA frameworks. Weighted by criticality so you know what to fix first.</div>
       </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Why do Critical items count more?</div>
-        <div class="faq-a">Critical items are documents that investors will always request and that commonly delay or kill deals if missing — for example, IP assignment agreements, cap table, audited financials. They carry 2× weight to reflect their real-world impact on deal closure.</div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Weighted Readiness Score</div>
+        <div class="feature-desc">Critical items carry 2× weight. "In Progress" earns partial credit. Category scores are weighted by deal-type significance — just like investors actually think.</div>
       </div>
-
-      <div class="faq-item">
-        <div class="faq-q">How is the overall score calculated?</div>
-        <div class="faq-a">Each category (e.g. Financials, Cap Table) has a pre-assigned weight that reflects its importance in the deal type. Your score per category is: <em>earned points ÷ max possible points × 100</em>. The overall score is the weighted average across all categories.</div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Valuation Engine</div>
+        <div class="feature-desc">Run DCF and VC Method valuations side by side. Includes an FCFE calculator to derive clean inputs directly from your financial statements.</div>
       </div>
+    </div>
 
-      <div class="faq-item">
-        <div class="faq-q">What do the score bands mean?</div>
-        <div class="faq-a">
-          <div class="score-band"><span class="band-dot red"></span><strong>0–40 Not Ready</strong> — Significant gaps. Investors will pause or pass.</div>
-          <div class="score-band"><span class="band-dot amber"></span><strong>41–70 Getting There</strong> — Core documents present but gaps remain. Expect investor queries.</div>
-          <div class="score-band"><span class="band-dot blue"></span><strong>71–90 Almost Ready</strong> — Strong foundation. Minor items to address before closing.</div>
-          <div class="score-band"><span class="band-dot green"></span><strong>91–100 Investor Ready</strong> — Institutional-grade data room. Ready for serious due diligence.</div>
+    <div class="features-bottom">
+      <div class="feature-card-wide">
+        <div class="feature-tag">🔗 Shareable</div>
+        <div class="feature-title">Send your results, not a PDF</div>
+        <div class="feature-desc">Copy a single link — your entire assessment state is encoded in the URL. Share it with your co-founder, CFO, or legal counsel. No login, no upload, no account required.</div>
+      </div>
+      <div class="feature-card-wide">
+        <div class="feature-tag">🔒 Private by Design</div>
+        <div class="feature-title">Zero server, zero storage</div>
+        <div class="feature-desc">Everything runs in your browser. No servers ever see your company name, answers, or financial data. Progress is saved to local storage on your own device — you're in full control.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS (two CTA cards) -->
+<section class="section tools-section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Two Tools, One Platform</div>
+    <h2 class="section-title serif">Start with readiness. Validate with valuation.</h2>
+    <p class="section-sub">Use both tools together to enter investor conversations fully prepared — on documentation and on numbers.</p>
+
+    <div class="tools-grid">
+
+      <!-- DD Checklist Card -->
+      <a class="tool-card tool-card-dd" href="checklist.html">
+        <div class="tool-card-body">
+          <div class="tool-label">📋 Trustra™ DD Readiness</div>
+          <div class="tool-icon-wrap">📋</div>
+          <h3 class="tool-title serif">Due Diligence Checklist</h3>
+          <p class="tool-desc">Step through every document investors will request. Get a scored, categorised readiness report. Identify critical gaps before they surface in the deal room.</p>
+          <div class="tool-chips">
+            <span class="tool-chip">Series A</span>
+            <span class="tool-chip">M&A / Acquisition</span>
+            <span class="tool-chip">SGX Listing</span>
+            <span class="tool-chip">SG + International Standards</span>
+          </div>
+          <span class="tool-cta">Check My Readiness <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <!-- Valuation Card -->
+      <a class="tool-card tool-card-val" href="valuation.html">
+        <div class="tool-card-body">
+          <div class="tool-label">📊 Trustra™ Valuation Engine</div>
+          <div class="tool-icon-wrap">📊</div>
+          <h3 class="tool-title serif">Valuation Engine</h3>
+          <p class="tool-desc">Run DCF and VC Method models side by side. Calculate FCFE from your financials and apply it directly into your DCF. Understand what drives the gap between methods.</p>
+          <div class="tool-chips">
+            <span class="tool-chip">DCF Model</span>
+            <span class="tool-chip">VC Method</span>
+            <span class="tool-chip">FCFE Calculator</span>
+            <span class="tool-chip">Comparison View</span>
+          </div>
+          <span class="tool-cta">Run Valuation <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY TRUST TRUSTRA -->
+<section class="section trust-section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Why Trust Trustra™</div>
+    <h2 class="section-title serif">Built from the inside of actual deals</h2>
+    <p class="section-sub">Not a generic checklist from a blog post. Built by someone who has sat on both sides of the table.</p>
+
+    <div class="trust-grid">
+
+      <!-- Trust Items -->
+      <div class="trust-items">
+        <div class="trust-item">
+          <div class="trust-item-icon">🏛️</div>
+          <div>
+            <div class="trust-item-title">Regulatory Precision</div>
+            <div class="trust-item-desc">Every SG item is mapped to a specific statute — ACRA's Companies Act, IRAS requirements, MAS licensing rules, MOM work pass obligations. Not generalised compliance, but the exact documents regulators and investors look for.</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item-icon">📐</div>
+          <div>
+            <div class="trust-item-title">Scoring With Institutional Logic</div>
+            <div class="trust-item-desc">Category weights are assigned based on where investors actually spend their time in each deal type. Cap table and financials dominate Series A. Legal and tax are heavier in M&A. SGX adds governance and prospectus layers. It mirrors the real process.</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item-icon">🎯</div>
+          <div>
+            <div class="trust-item-title">Critical Items Are Flagged, Not Buried</div>
+            <div class="trust-item-desc">Missing an IP assignment or a vesting schedule can kill a deal even when everything else is in order. These deal-breakers are highlighted so founders fix the right things first — not just fill a checklist from top to bottom.</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item-icon">🔒</div>
+          <div>
+            <div class="trust-item-title">Confidentiality by Architecture</div>
+            <div class="trust-item-desc">Your company's preparation is commercially sensitive. Trustra<span class="tm">™</span> runs entirely in the browser — no backend, no analytics on your answers, no cloud storage. Share results only when you choose to, via a URL you control.</div>
+          </div>
         </div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q">What checklist standards are used?</div>
-        <div class="faq-a"><strong>SG-focused</strong> items align to ACRA (Companies Act), IRAS (tax), MAS (regulatory), and MOM (employment) requirements. <strong>International</strong> items follow NVCA and institutional PE/VC DD frameworks used globally. <strong>Both</strong> is recommended for any SG company raising from international investors.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">How are category weights assigned?</div>
-        <div class="faq-a">For Series A: Cap Table &amp; Equity 25%, Financials 25%, Corporate 20%, Legal 10%, Tax 10%, People 10%. For M&amp;A: Financials 30%, Legal 20%, Corporate 15%, Tax 15%, People 10%, Technology 10%. Weights reflect what investors spend the most time on in each deal type.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Can I share my results with an investor?</div>
-        <div class="faq-a">Yes. Click <strong>Copy Link</strong> on the results page — the full state of your assessment is encoded in the URL. Anyone with the link can view your exact readiness report. You can also click <strong>Download PDF</strong> to generate a printable report.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Is my data stored anywhere?</div>
-        <div class="faq-a">No. All data stays in your browser — nothing is sent to any server. Your progress is saved to local storage so you can continue later, and the shareable link encodes everything in the URL itself using base64.</div>
+      <!-- Trust Visual -->
+      <div class="trust-visual">
+        <div class="trust-score-header">
+          <div class="trust-score-left">
+            <div class="trust-score-number">84</div>
+            <div class="trust-score-label">Overall Readiness</div>
+          </div>
+          <div class="trust-score-badge">
+            ✓ Almost Ready
+          </div>
+        </div>
+        <div class="trust-bars">
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">Corporate Docs</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:92%;background:var(--green)"></div></div>
+            <span class="trust-bar-pct">92%</span>
+          </div>
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">Cap Table</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:88%;background:var(--green)"></div></div>
+            <span class="trust-bar-pct">88%</span>
+          </div>
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">Financials</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:78%;background:#2980B9"></div></div>
+            <span class="trust-bar-pct">78%</span>
+          </div>
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">Legal</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:65%;background:var(--amber)"></div></div>
+            <span class="trust-bar-pct">65%</span>
+          </div>
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">Tax</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:82%;background:#2980B9"></div></div>
+            <span class="trust-bar-pct">82%</span>
+          </div>
+          <div class="trust-bar-row">
+            <span class="trust-bar-label">People</span>
+            <div class="trust-bar-track"><div class="trust-bar-fill" style="width:90%;background:var(--green)"></div></div>
+            <span class="trust-bar-pct">90%</span>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- About Section -->
-<section class="about-section">
-  <div class="about-inner">
-    <div class="about-label">About the Creator</div>
-    <div class="about-grid">
+<!-- ABOUT -->
+<section class="section about-section">
+  <div class="section-inner">
+    <div class="about-inner">
+
       <div class="about-text">
+        <div class="about-eyebrow">About the Creator</div>
         <h2 class="about-name serif">Hendrik Jap</h2>
         <div class="about-titles">
           <span class="about-title-tag">FCCA</span>
           <span class="about-title-tag">CA (Singapore)</span>
-          <span class="about-title-tag">CFO, Kacamatamoo</span>
+          <span class="about-title-tag">CFO, Kacamatamoo Group</span>
         </div>
-        <p class="about-bio">Hendrik is a finance executive operating at the intersection of strategy and execution. As CFO of Kacamatamoo — a vision care group with over 100 locations across ASEAN — he leads pre-IPO readiness, FP&amp;A, and ESG for a business scaling fast across multiple jurisdictions.</p>
-        <p class="about-bio">He also serves as an Independent Director on the boards of several Singapore-incorporated firms, advising on sustainability, compliance, AI adoption, and finance transformation across companies at various stages of growth.</p>
-        <p class="about-bio">Beyond the group, he guest lectures at SMU (Singapore Management University) on venture capital mechanics. <em>ACCA's AB Magazine</em> has featured him twice — on the fractional CFO model in APAC, and on the rise of finance leadership in high-growth emerging market businesses. He was recently invited to speak as a panelist at the FutureCFO conference on sustainability and AI.</p>
-        <p class="about-bio">Trustra<span class="tm">™</span> was built from his firsthand experience seeing founders lose deals — not because their business was weak, but because their data room wasn't ready.</p>
-      </div>
-      <div class="about-stats">
-        <div class="about-stat">
-          <div class="about-stat-number">100+</div>
-          <div class="about-stat-label">ASEAN locations led as CFO</div>
-        </div>
-        <div class="about-stat">
-          <div class="about-stat-number">SMU</div>
-          <div class="about-stat-label">Guest lecturer, venture capital</div>
-        </div>
-        <div class="about-stat">
-          <div class="about-stat-number">2×</div>
-          <div class="about-stat-label">Featured in ACCA AB Magazine</div>
-        </div>
-        <div class="about-stat">
-          <div class="about-stat-number">FCCA</div>
-          <div class="about-stat-label">&amp; CA (Singapore) qualified</div>
+
+        <p class="about-bio">Hendrik is a finance executive operating at the intersection of strategy, compliance, and capital markets. As <strong>CFO of Kacamatamoo</strong> — a vision care group with over 100 locations across ASEAN — he leads pre-IPO readiness, FP&A, and ESG for a business scaling fast across multiple jurisdictions.</p>
+
+        <p class="about-bio">He serves as an <strong>Independent Director</strong> on the boards of several Singapore-incorporated firms, advising on sustainability, compliance, AI adoption, and finance transformation at various stages of growth.</p>
+
+        <p class="about-bio">He guest lectures at <strong>SMU</strong> on venture capital mechanics and has been featured twice in <em>ACCA's AB Magazine</em> — on the fractional CFO model in APAC, and on the rise of finance leadership in high-growth emerging market businesses. He was also invited to speak at the <em>FutureCFO conference</em> on sustainability and AI.</p>
+
+        <div class="about-quote">
+          <p>"Founders lose deals not because the business is weak — but because the data room isn't ready. I built Trustra<span class="tm">™</span> to give founders the same institutional lens investors use."</p>
+          <div class="about-quote-attr">— Hendrik Jap, FCCA, CA (Singapore)</div>
         </div>
       </div>
+
+      <div>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-number">100+</div>
+            <div class="about-stat-label">ASEAN locations led as CFO</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">SMU</div>
+            <div class="about-stat-label">Guest lecturer, venture capital</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">2×</div>
+            <div class="about-stat-label">Featured in ACCA AB Magazine</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">FCCA</div>
+            <div class="about-stat-label">&amp; CA (Singapore) qualified</div>
+          </div>
+        </div>
+
+        <div class="about-press">
+          <div class="about-press-label">Recognition</div>
+          <div class="about-press-items">
+            <div class="about-press-item"><span class="press-dot"></span>ACCA AB Magazine — Fractional CFO model in APAC</div>
+            <div class="about-press-item"><span class="press-dot"></span>ACCA AB Magazine — Finance leadership in high-growth markets</div>
+            <div class="about-press-item"><span class="press-dot"></span>FutureCFO Conference panelist — Sustainability &amp; AI</div>
+            <div class="about-press-item"><span class="press-dot"></span>SMU guest lecturer — Venture capital mechanics</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<footer class="landing-footer">
-  <div class="footer-standards">
-    <span class="std-tag">ACRA</span>
-    <span class="std-tag">MAS</span>
-    <span class="std-tag">IRAS</span>
-    <span class="std-tag">NVCA</span>
-    <span class="std-tag">SGX Rules</span>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <a class="footer-logo" href="index.html">
+      <div class="footer-logo-mark">T</div>
+      <span class="footer-logo-word">Trustra<span class="tm">™</span></span>
+    </a>
+    <div class="footer-standards">
+      <span class="footer-std">ACRA</span>
+      <span class="footer-std">MAS</span>
+      <span class="footer-std">IRAS</span>
+      <span class="footer-std">MOM</span>
+      <span class="footer-std">NVCA</span>
+      <span class="footer-std">SGX Rules</span>
+    </div>
+    <span class="footer-copy">© 2025 Trustra™. Built for SG founders.</span>
   </div>
-  <span class="footer-copy">© 2025 Trustra<span class="tm">™</span>. Built for SG founders.</span>
 </footer>
 
 </body>
