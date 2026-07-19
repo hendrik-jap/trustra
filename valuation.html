@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valuation Engine — Trustra™</title>
+<style>.tm { font-size: 0.55em; vertical-align: super; letter-spacing: 0; font-family: 'DM Sans', sans-serif; font-weight: 400; }</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TRUSTRA BRAND PALETTE ── */
+:root {
+  --bg: #F6F7F8;
+  --heading: #111111;
+  --body: #444444;
+  --teal: #0F8B6D;
+  --teal-light: #E6F7F3;
+  --gold: #D7A64A;
+  --white: #FFFFFF;
+  --border: #D6D9DD;
+  --border-strong: #B0B5BB;
+  --silver: #6B7784;
+  --shadow: 0 4px 24px rgba(22,26,29,0.08);
+  --shadow-lg: 0 12px 48px rgba(22,26,29,0.14);
+  --radius: 4px;
+  --radius-lg: 8px;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+
+  /* Valuation engine palette */
+  --bg-deep: #0a0e17;
+  --bg-panel: #111827;
+  --bg-input: #1a2332;
+  --ve-border: #1e2d3d;
+  --ve-border-focus: #2dd4bf;
+  --text-primary: #e2e8f0;
+  --text-secondary: #8899aa;
+  --text-muted: #4a5568;
+  --accent-cyan: #2dd4bf;
+  --accent-green: #22c55e;
+  --accent-blue: #3b82f6;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --gradient-dcf: linear-gradient(135deg, #2dd4bf 0%, #3b82f6 100%);
+  --gradient-vc: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+  --ve-radius: 12px;
+  --ve-radius-sm: 8px;
+  --shadow-panel: 0 4px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.03);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TRUSTRA TOPNAV ── */
+.trustra-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--teal);
+  color: var(--white);
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.02em;
+}
+
+.logo-word {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--heading);
+  letter-spacing: 0.04em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--body);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+
+.nav-link:hover { background: var(--bg); color: var(--heading); }
+.nav-link.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+
+.nav-cta {
+  margin-left: 8px;
+  padding: 8px 18px;
+  background: var(--teal);
+  color: var(--white);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+.nav-cta:hover { background: #0d7a5f; }
+
+@media (max-width: 600px) {
+  .trustra-nav { padding: 0 16px; }
+  .nav-link span { display: none; }
+  .nav-link { padding: 8px 10px; }
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--ve-border);
+  padding: 28px 28px 20px;
+  position: relative; z-index: 1;
+}
+
+.page-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.page-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.method-pills { display: flex; gap: 6px; }
+
+.method-pill {
+  padding: 6px 16px; border-radius: 20px; font-size: .8rem; font-weight: 500;
+  cursor: pointer; transition: all .25s; border: 1px solid var(--ve-border);
+  color: var(--text-secondary); user-select: none;
+}
+.method-pill:hover { border-color: var(--text-muted); color: var(--text-primary); }
+.method-pill.active-both {
+  border-color: var(--accent-cyan); color: var(--accent-cyan);
+  background: rgba(45,212,191,.08);
+}
+
+/* ── GRAIN + GLOW ── */
+.grain-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  opacity: .025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── VALUATION ENGINE STYLES ── */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 28px;
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.dashboard.show-dcf .vc-panel { display: none; }
+.dashboard.show-dcf { grid-template-columns: 1fr; max-width: 780px; }
+.dashboard.show-vc .dcf-panel { display: none; }
+.dashboard.show-vc { grid-template-columns: 1fr; max-width: 780px; }
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--ve-border);
+  border-radius: var(--ve-radius);
+  padding: 28px;
+  box-shadow: var(--shadow-panel);
+  animation: panelIn .5s ease both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.vc-panel { animation-delay: .08s; }
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.panel-header h2 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.02em; }
+.badge {
+  font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 500;
+  padding: 4px 10px; border-radius: 20px;
+  background: rgba(45,212,191,.1); color: var(--accent-cyan); border: 1px solid rgba(45,212,191,.2);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.badge-vc { background: rgba(245,158,11,.1); color: var(--accent-amber); border-color: rgba(245,158,11,.2); }
+.panel-desc { font-size: .82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 22px; max-width: 560px; }
+
+.inputs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.input-group { position: relative; }
+.input-group label {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .72rem; font-weight: 500; color: var(--text-secondary);
+  margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em;
+}
+.tooltip-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(45,212,191,.12); border: 1px solid rgba(45,212,191,.25);
+  color: var(--accent-cyan); font-size: .6rem; font-weight: 700;
+  cursor: help; flex-shrink: 0; position: relative;
+  font-family: 'JetBrains Mono', monospace; line-height: 1;
+  transition: background .2s, border-color .2s;
+}
+.tooltip-trigger:hover { background: rgba(45,212,191,.22); border-color: var(--accent-cyan); }
+.tooltip-trigger .tooltip-text {
+  visibility: hidden; opacity: 0;
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 220px; padding: 10px 12px;
+  background: #1a2332; border: 1px solid var(--ve-border);
+  border-radius: var(--ve-radius-sm);
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  color: var(--text-primary); font-size: .75rem; font-weight: 400;
+  line-height: 1.5; text-transform: none; letter-spacing: 0;
+  z-index: 200; pointer-events: none;
+  transition: opacity .2s, transform .2s, visibility .2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.tooltip-trigger .tooltip-text::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #1a2332;
+}
+.tooltip-trigger:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+.input-group:first-child .tooltip-trigger .tooltip-text { left: 0; transform: translateX(0) translateY(4px); }
+.input-group:first-child .tooltip-trigger:hover .tooltip-text { transform: translateX(0) translateY(0); }
+.input-group:first-child .tooltip-trigger .tooltip-text::after { left: 12px; transform: none; }
+.input-group:last-child .tooltip-trigger .tooltip-text { left: auto; right: 0; transform: translateX(0) translateY(4px); }
+.input-group:last-child .tooltip-trigger:hover .tooltip-text { transform: translateX(0) translateY(0); }
+.input-group:last-child .tooltip-trigger .tooltip-text::after { left: auto; right: 12px; transform: none; }
+.input-group input {
+  width: 100%; padding: 9px 12px;
+  background: var(--bg-input); border: 1px solid var(--ve-border); border-radius: var(--ve-radius-sm);
+  color: var(--text-primary); font-family: 'JetBrains Mono', monospace; font-size: .9rem;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+.input-group input:focus {
+  border-color: var(--ve-border-focus);
+  box-shadow: 0 0 0 3px rgba(45,212,191,.1);
+}
+
+.table-wrap { overflow-x: auto; margin-bottom: 20px; }
+.dcf-table {
+  width: 100%; border-collapse: collapse; font-size: .85rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.dcf-table th {
+  text-align: left; padding: 10px 14px; font-size: .7rem; font-weight: 500;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em;
+  border-bottom: 1px solid var(--ve-border);
+}
+.dcf-table td {
+  padding: 10px 14px; border-bottom: 1px solid rgba(30,45,61,.5);
+  transition: background .2s;
+}
+.dcf-table tbody tr:hover td { background: rgba(45,212,191,.03); }
+.dcf-table .year-cell { color: var(--text-secondary); font-weight: 500; }
+.dcf-table .fcfe-cell { color: var(--text-primary); }
+.dcf-table .dcf-cell { color: var(--accent-cyan); font-weight: 500; }
+.dcf-table .terminal-row td { border-top: 1px dashed rgba(45,212,191,.2); color: var(--accent-green); }
+.dcf-table tfoot td { padding: 14px; font-weight: 600; font-size: .95rem; border-top: 2px solid var(--accent-cyan); }
+.bar-col { width: 120px; }
+.mini-bar { height: 6px; border-radius: 3px; background: var(--gradient-dcf); transition: width .4s cubic-bezier(.4,0,.2,1); opacity: .7; }
+
+.valuation-result {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border-radius: var(--ve-radius-sm);
+  background: linear-gradient(135deg, rgba(45,212,191,.08) 0%, rgba(59,130,246,.06) 100%);
+  border: 1px solid rgba(45,212,191,.15);
+}
+.vc-result-box { background: linear-gradient(135deg, rgba(245,158,11,.08) 0%, rgba(244,63,94,.06) 100%); border-color: rgba(245,158,11,.15); }
+.result-label { font-size: .8rem; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; }
+.result-value { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 600; color: var(--accent-cyan); transition: transform .2s; }
+.result-value.vc-val { color: var(--accent-amber); }
+.result-value.pop { transform: scale(1.08); }
+
+.vc-breakdown { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+.vc-step { text-align: center; padding: 16px 18px; border-radius: var(--ve-radius-sm); background: var(--bg-input); border: 1px solid var(--ve-border); min-width: 130px; flex: 1; }
+.vc-step-label { font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.vc-step-formula { font-size: .78rem; color: var(--text-secondary); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; min-height: 1.2em; }
+.vc-step-value { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 600; color: var(--accent-amber); }
+.vc-arrow { font-size: 1.3rem; color: var(--text-muted); flex-shrink: 0; }
+
+.vc-visual { margin-bottom: 22px; }
+.vc-bar-track { position: relative; height: 32px; border-radius: 6px; overflow: hidden; background: var(--bg-input); }
+.vc-bar-exit, .vc-bar-pv, .vc-bar-pre { position: absolute; top: 0; left: 0; height: 100%; display: flex; align-items: center; padding-left: 10px; font-size: .68rem; font-weight: 500; letter-spacing: .03em; transition: width .5s cubic-bezier(.4,0,.2,1); white-space: nowrap; overflow: hidden; }
+.vc-bar-exit { background: rgba(245,158,11,.12); border-right: 1px solid rgba(245,158,11,.3); color: var(--accent-amber); z-index: 1; }
+.vc-bar-pv { background: rgba(245,158,11,.22); z-index: 2; color: #fbbf24; }
+.vc-bar-pre { background: var(--gradient-vc); z-index: 3; color: #fff; }
+
+.vc-insight { margin-top: 14px; font-size: .8rem; color: var(--text-secondary); line-height: 1.5; padding: 12px 16px; border-radius: var(--ve-radius-sm); background: var(--bg-input); border: 1px solid var(--ve-border); min-height: 44px; }
+
+.comparison { max-width: 1440px; margin: 0 auto 40px; padding: 0 28px; position: relative; z-index: 1; animation: panelIn .5s ease .15s both; }
+.comparison h3 { font-size: .8rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+.comp-bars { display: flex; flex-direction: column; gap: 12px; }
+.comp-row { display: flex; align-items: center; gap: 14px; }
+.comp-label { font-size: .8rem; color: var(--text-secondary); min-width: 90px; font-weight: 500; }
+.comp-bar-track { flex: 1; height: 28px; background: var(--bg-input); border-radius: 6px; overflow: hidden; border: 1px solid var(--ve-border); }
+.comp-bar { height: 100%; border-radius: 5px; transition: width .5s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-family: 'JetBrains Mono', monospace; font-size: .7rem; font-weight: 500; min-width: 2%; }
+.comp-bar-dcf { background: var(--gradient-dcf); color: #0a0e17; }
+.comp-bar-vc { background: var(--gradient-vc); color: #0a0e17; }
+.comp-val { font-family: 'JetBrains Mono', monospace; font-size: .9rem; font-weight: 600; min-width: 90px; text-align: right; }
+#comp-dcf-val { color: var(--accent-cyan); }
+#comp-vc-val { color: var(--accent-amber); }
+.comp-delta { margin-top: 14px; font-size: .82rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+
+/* FCFE CALCULATOR */
+.fcfe-section { max-width: 1440px; margin: 0 auto 40px; padding: 0 28px; position: relative; z-index: 1; animation: panelIn .5s ease .2s both; }
+.fcfe-panel-card { background: var(--bg-panel); border: 1px solid var(--ve-border); border-radius: var(--ve-radius); padding: 28px; box-shadow: var(--shadow-panel); }
+.badge-fcfe { background: rgba(34,197,94,.1); color: var(--accent-green); border-color: rgba(34,197,94,.2); }
+.fcfe-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.fcfe-group { margin-bottom: 18px; }
+.fcfe-group-title { font-size: .7rem; font-weight: 600; color: var(--accent-green); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(34,197,94,.15); }
+.fcfe-inputs-col .input-group { margin-bottom: 12px; }
+.fcfe-result-col { position: sticky; top: 80px; }
+.fcfe-formula-visual { background: var(--bg-input); border: 1px solid var(--ve-border); border-radius: var(--ve-radius-sm); padding: 20px; margin-bottom: 16px; }
+.fcfe-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: .85rem; }
+.fcfe-line + .fcfe-line { border-top: 1px solid rgba(30,45,61,.5); }
+.fcfe-line-label { color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+.fcfe-line-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--text-primary); }
+.fcfe-op { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 4px; font-size: .75rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+.fcfe-line-add .fcfe-op { background: rgba(34,197,94,.15); color: var(--accent-green); }
+.fcfe-line-sub .fcfe-op { background: rgba(244,63,94,.15); color: var(--accent-rose); }
+.fcfe-line-total { border-top: 2px solid var(--accent-green) !important; margin-top: 4px; padding-top: 12px; }
+.fcfe-line-total .fcfe-line-label { color: var(--text-primary); font-weight: 600; font-size: .9rem; }
+.fcfe-total-value { font-size: 1.25rem; font-weight: 600; color: var(--accent-green) !important; transition: transform .2s; }
+.fcfe-total-value.pop { transform: scale(1.08); }
+.fcfe-apply-btn { width: 100%; padding: 12px 20px; background: linear-gradient(135deg, rgba(34,197,94,.15) 0%, rgba(45,212,191,.1) 100%); border: 1px solid rgba(34,197,94,.3); border-radius: var(--ve-radius-sm); color: var(--accent-green); font-family: 'DM Sans', sans-serif; font-size: .88rem; font-weight: 600; cursor: pointer; transition: all .25s; letter-spacing: .01em; }
+.fcfe-apply-btn:hover { background: linear-gradient(135deg, rgba(34,197,94,.25) 0%, rgba(45,212,191,.18) 100%); border-color: var(--accent-green); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(34,197,94,.15); }
+.fcfe-apply-btn:active { transform: translateY(0); }
+.fcfe-apply-msg { margin-top: 8px; font-size: .78rem; color: var(--accent-green); text-align: center; min-height: 1.2em; transition: opacity .3s; font-family: 'JetBrains Mono', monospace; }
+
+/* ── FOOTER ── */
+.ve-footer {
+  border-top: 1px solid var(--ve-border);
+  padding: 20px 28px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  position: relative; z-index: 1;
+}
+.ve-footer a { color: var(--accent-cyan); text-decoration: none; }
+.ve-footer a:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .dashboard { grid-template-columns: 1fr; }
+  .dashboard.show-dcf, .dashboard.show-vc { max-width: 100%; }
+  .panel { padding: 20px; }
+  .inputs-grid { grid-template-columns: 1fr 1fr; }
+  .vc-breakdown { gap: 8px; }
+  .vc-step { min-width: 100px; padding: 12px; }
+  .fcfe-layout { grid-template-columns: 1fr; }
+  .fcfe-result-col { position: static; }
+}
+@media (max-width: 520px) {
+  .inputs-grid { grid-template-columns: 1fr; }
+  .vc-breakdown { flex-direction: column; }
+  .vc-arrow { transform: rotate(90deg); }
+  .comp-row { flex-wrap: wrap; }
+  .comp-label { min-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="grain-overlay"></div>
+
+<!-- Trustra Navigation -->
+<nav class="trustra-nav">
+  <a class="logo" href="index.html">
+    <div class="logo-mark">T</div>
+    <span class="logo-word">Trustra<span class="tm">™</span></span>
+  </a>
+  <div class="site-nav">
+    <a class="nav-link" href="index.html">🏠 <span>Home</span></a>
+    <a class="nav-link" href="index.html">📋 <span>DD Checklist</span></a>
+    <a class="nav-link active nav-cta" href="valuation.html">📊 Valuation</a>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <div class="page-title">Valuation Engine</div>
+      <div class="page-sub">DCF &amp; Venture Capital method — side by side</div>
+    </div>
+    <div class="method-pills">
+      <span class="method-pill dcf-pill" data-target="dcf">DCF</span>
+      <span class="method-pill vc-pill" data-target="vc">VC Method</span>
+      <span class="method-pill both-pill active-both" data-target="both">Both</span>
+    </div>
+  </div>
+</div>
+
+<main class="dashboard" id="dashboard">
+  <!-- DCF Panel -->
+  <section class="panel dcf-panel" id="dcf-panel">
+    <div class="panel-header">
+      <h2>Discounted Cash Flow</h2>
+      <span class="badge">Income-Based</span>
+    </div>
+    <p class="panel-desc">Estimates value as the present value of projected future free cash flows, discounted for risk and time value of money.</p>
+    <div class="inputs-grid">
+      <div class="input-group">
+        <label>Projection Years <span class="tooltip-trigger">?<span class="tooltip-text">How many years into the future to project cash flows. Longer periods capture more growth but add uncertainty. Typical range: 3–10 years.</span></span></label>
+        <input type="number" id="dcf-years" value="5" min="1" max="15" step="1">
+      </div>
+      <div class="input-group">
+        <label>Initial FCFE ($M) <span class="tooltip-trigger">?<span class="tooltip-text">Free Cash Flow to Equity — the cash available to shareholders after all expenses, reinvestments, and debt payments. This is Year 1's starting cash flow in millions.</span></span></label>
+        <input type="number" id="dcf-fcfe" value="10" min="0.1" step="0.1">
+      </div>
+      <div class="input-group">
+        <label>Growth Rate (%) <span class="tooltip-trigger">?<span class="tooltip-text">The annual rate at which free cash flow is expected to grow each year. E.g., 20% means each year's FCFE is 1.2x the previous year.</span></span></label>
+        <input type="number" id="dcf-growth" value="20" min="0" max="200" step="0.5">
+      </div>
+      <div class="input-group">
+        <label>Terminal Value ($M) <span class="tooltip-trigger">?<span class="tooltip-text">The estimated value of the company at the end of the projection period, representing all cash flows beyond the forecast horizon. Often the largest component of a DCF.</span></span></label>
+        <input type="number" id="dcf-terminal" value="25" min="0" step="0.5">
+      </div>
+      <div class="input-group">
+        <label>Discount Rate (%) <span class="tooltip-trigger">?<span class="tooltip-text">The rate used to convert future cash flows to present value. Reflects the risk and time value of money — higher rates mean future cash is worth less today. Often based on cost of equity or WACC.</span></span></label>
+        <input type="number" id="dcf-discount" value="15" min="0.1" max="100" step="0.5">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="dcf-table" id="dcf-table">
+        <thead>
+          <tr><th>Year</th><th>FCFE</th><th>Discounted CF</th><th class="bar-col"></th></tr>
+        </thead>
+        <tbody id="dcf-tbody"></tbody>
+        <tfoot id="dcf-tfoot"></tfoot>
+      </table>
+    </div>
+    <div class="valuation-result" id="dcf-result">
+      <span class="result-label">DCF Valuation</span>
+      <span class="result-value" id="dcf-valuation">$0.00M</span>
+    </div>
+  </section>
+
+  <!-- VC Panel -->
+  <section class="panel vc-panel" id="vc-panel">
+    <div class="panel-header">
+      <h2>Venture Capital Method</h2>
+      <span class="badge badge-vc">Exit-Based</span>
+    </div>
+    <p class="panel-desc">Derives pre-money valuation by discounting expected exit value at the investor's target ROI, then subtracting the proposed investment.</p>
+    <div class="inputs-grid">
+      <div class="input-group">
+        <label>Expected Exit Value ($M) <span class="tooltip-trigger">?<span class="tooltip-text">The anticipated value of the company at exit (IPO, acquisition, or buyout). Based on comparable exits, revenue multiples, or strategic value projections.</span></span></label>
+        <input type="number" id="vc-exit" value="120" min="0.1" step="1">
+      </div>
+      <div class="input-group">
+        <label>Time to Exit (Years) <span class="tooltip-trigger">?<span class="tooltip-text">How many years until the expected exit event. Early-stage companies typically take 7–10 years; later-stage deals may exit in 3–5 years.</span></span></label>
+        <input type="number" id="vc-years" value="5" min="1" max="30" step="1">
+      </div>
+      <div class="input-group">
+        <label>Target ROI (%) <span class="tooltip-trigger">?<span class="tooltip-text">The annualized return the investor requires. Seed investors often target 50–100%+, Series A targets 30–50%, and growth-stage targets 20–25% to compensate for risk.</span></span></label>
+        <input type="number" id="vc-roi" value="30" min="1" max="500" step="1">
+      </div>
+      <div class="input-group">
+        <label>Investment Amount ($M) <span class="tooltip-trigger">?<span class="tooltip-text">The amount of capital the investor plans to put into the company in this funding round. Subtracted from the discounted exit value to derive the pre-money valuation.</span></span></label>
+        <input type="number" id="vc-invest" value="10" min="0.1" step="0.5">
+      </div>
+    </div>
+    <div class="vc-breakdown">
+      <div class="vc-step">
+        <div class="vc-step-label">Discount Factor</div>
+        <div class="vc-step-formula" id="vc-factor-formula">(1 + 30%)<sup>5</sup></div>
+        <div class="vc-step-value" id="vc-factor">3.71x</div>
+      </div>
+      <div class="vc-arrow">&#x2192;</div>
+      <div class="vc-step">
+        <div class="vc-step-label">PV of Exit</div>
+        <div class="vc-step-formula" id="vc-pv-formula">$120M &divide; 3.71</div>
+        <div class="vc-step-value" id="vc-pv">$32.32M</div>
+      </div>
+      <div class="vc-arrow">&#x2212;</div>
+      <div class="vc-step">
+        <div class="vc-step-label">Investment</div>
+        <div class="vc-step-formula">&nbsp;</div>
+        <div class="vc-step-value" id="vc-inv-display">$10.00M</div>
+      </div>
+    </div>
+    <div class="vc-visual" id="vc-visual">
+      <div class="vc-bar-track">
+        <div class="vc-bar-exit" id="vc-bar-exit"><span>Exit Value</span></div>
+        <div class="vc-bar-pv" id="vc-bar-pv"><span>PV of Exit</span></div>
+        <div class="vc-bar-pre" id="vc-bar-pre"><span>Pre-Money</span></div>
+      </div>
+    </div>
+    <div class="valuation-result vc-result-box" id="vc-result">
+      <span class="result-label">Pre-Money Valuation</span>
+      <span class="result-value vc-val" id="vc-valuation">$22.32M</span>
+    </div>
+    <div class="vc-insight" id="vc-insight"></div>
+  </section>
+</main>
+
+<!-- Comparison -->
+<section class="comparison" id="comparison">
+  <h3>Valuation Comparison</h3>
+  <div class="comp-bars">
+    <div class="comp-row">
+      <span class="comp-label">DCF Method</span>
+      <div class="comp-bar-track">
+        <div class="comp-bar comp-bar-dcf" id="comp-bar-dcf"></div>
+      </div>
+      <span class="comp-val" id="comp-dcf-val">—</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-label">VC Method</span>
+      <div class="comp-bar-track">
+        <div class="comp-bar comp-bar-vc" id="comp-bar-vc"></div>
+      </div>
+      <span class="comp-val" id="comp-vc-val">—</span>
+    </div>
+  </div>
+  <div class="comp-delta" id="comp-delta"></div>
+</section>
+
+<!-- FCFE Calculator -->
+<section class="fcfe-section" id="fcfe-section">
+  <div class="panel fcfe-panel-card">
+    <div class="panel-header">
+      <h2>FCFE Calculator</h2>
+      <span class="badge badge-fcfe">Financial Statements</span>
+    </div>
+    <p class="panel-desc">Derive Free Cash Flow to Equity from your financial statements. The computed FCFE can be applied directly to the DCF model as the initial cash flow input.</p>
+    <div class="fcfe-layout">
+      <div class="fcfe-inputs-col">
+        <div class="fcfe-group">
+          <div class="fcfe-group-title">Income Statement</div>
+          <div class="input-group">
+            <label>Net Income ($M) <span class="tooltip-trigger">?<span class="tooltip-text">The company's total profit after all expenses, taxes, and interest. Found at the bottom of the income statement.</span></span></label>
+            <input type="number" id="fcfe-net-income" value="15" step="0.1">
+          </div>
+        </div>
+        <div class="fcfe-group">
+          <div class="fcfe-group-title">Cash Flow Statement</div>
+          <div class="input-group">
+            <label>Depreciation &amp; Amort. ($M) <span class="tooltip-trigger">?<span class="tooltip-text">Non-cash charges that reduce reported earnings but don't affect actual cash. Added back because no cash left the company.</span></span></label>
+            <input type="number" id="fcfe-da" value="3" min="0" step="0.1">
+          </div>
+          <div class="input-group">
+            <label>Capital Expenditures ($M) <span class="tooltip-trigger">?<span class="tooltip-text">Cash spent on acquiring or maintaining physical assets. Subtracted because this cash is reinvested.</span></span></label>
+            <input type="number" id="fcfe-capex" value="5" min="0" step="0.1">
+          </div>
+        </div>
+        <div class="fcfe-group">
+          <div class="fcfe-group-title">Balance Sheet Changes</div>
+          <div class="input-group">
+            <label>Change in Working Capital ($M) <span class="tooltip-trigger">?<span class="tooltip-text">The change in current assets minus current liabilities. A positive number means cash was tied up in operations.</span></span></label>
+            <input type="number" id="fcfe-wc" value="2" step="0.1">
+          </div>
+          <div class="input-group">
+            <label>Net Borrowing ($M) <span class="tooltip-trigger">?<span class="tooltip-text">New debt issued minus debt repaid. Positive means the company raised more debt than it repaid.</span></span></label>
+            <input type="number" id="fcfe-borrowing" value="1" step="0.1">
+          </div>
+        </div>
+      </div>
+      <div class="fcfe-result-col">
+        <div class="fcfe-formula-visual">
+          <div class="fcfe-line">
+            <span class="fcfe-line-label">Net Income</span>
+            <span class="fcfe-line-value" id="fcfe-vis-ni">$15.00M</span>
+          </div>
+          <div class="fcfe-line fcfe-line-add">
+            <span class="fcfe-line-label"><span class="fcfe-op">+</span> Depreciation &amp; Amort.</span>
+            <span class="fcfe-line-value" id="fcfe-vis-da">$3.00M</span>
+          </div>
+          <div class="fcfe-line fcfe-line-sub">
+            <span class="fcfe-line-label"><span class="fcfe-op">&minus;</span> Capital Expenditures</span>
+            <span class="fcfe-line-value" id="fcfe-vis-capex">$5.00M</span>
+          </div>
+          <div class="fcfe-line fcfe-line-sub">
+            <span class="fcfe-line-label"><span class="fcfe-op">&minus;</span> &Delta; Working Capital</span>
+            <span class="fcfe-line-value" id="fcfe-vis-wc">$2.00M</span>
+          </div>
+          <div class="fcfe-line fcfe-line-add">
+            <span class="fcfe-line-label"><span class="fcfe-op">+</span> Net Borrowing</span>
+            <span class="fcfe-line-value" id="fcfe-vis-borrow">$1.00M</span>
+          </div>
+          <div class="fcfe-line fcfe-line-total">
+            <span class="fcfe-line-label">Free Cash Flow to Equity</span>
+            <span class="fcfe-line-value fcfe-total-value" id="fcfe-vis-total">$12.00M</span>
+          </div>
+        </div>
+        <button class="fcfe-apply-btn" id="fcfe-apply-btn">Apply to DCF Model &rarr;</button>
+        <div class="fcfe-apply-msg" id="fcfe-apply-msg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ve-footer">
+  Part of <a href="index.html">Trustra<span class="tm">™</span></a> — DD Readiness Platform &nbsp;·&nbsp; © 2025 Trustra™. Built for SG founders.
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = (v) => {
+  if (Math.abs(v) >= 1000) return '$' + (v/1000).toFixed(2) + 'B';
+  if (Math.abs(v) >= 0.01) return '$' + v.toFixed(2) + 'M';
+  return '$0.00M';
+};
+
+// Tab switching
+const pills = document.querySelectorAll('.method-pill');
+const dashboard = $('dashboard');
+pills.forEach(p => {
+  p.addEventListener('click', () => {
+    pills.forEach(pp => pp.classList.remove('active-both'));
+    p.classList.add('active-both');
+    const t = p.dataset.target;
+    dashboard.classList.remove('show-dcf', 'show-vc');
+    if (t === 'dcf') dashboard.classList.add('show-dcf');
+    else if (t === 'vc') dashboard.classList.add('show-vc');
+  });
+});
+
+function popValue(el) {
+  el.classList.add('pop');
+  setTimeout(() => el.classList.remove('pop'), 200);
+}
+
+function calcDCF() {
+  const years = parseInt($('dcf-years').value) || 5;
+  const initFCFE = parseFloat($('dcf-fcfe').value) || 10;
+  const growth = (parseFloat($('dcf-growth').value) || 20) / 100;
+  const terminal = parseFloat($('dcf-terminal').value) || 25;
+  const discount = (parseFloat($('dcf-discount').value) || 15) / 100;
+  const currentYear = new Date().getFullYear();
+
+  const tbody = $('dcf-tbody');
+  const tfoot = $('dcf-tfoot');
+  let totalDCF = 0, maxDCF = 0;
+  const data = [];
+  for (let i = 1; i <= years; i++) {
+    const fcfe = initFCFE * Math.pow(1 + growth, i - 1);
+    const dcf = fcfe / Math.pow(1 + discount, i);
+    data.push({ year: currentYear + i, fcfe, dcf });
+    totalDCF += dcf;
+    if (dcf > maxDCF) maxDCF = dcf;
+  }
+  const termDCF = terminal / Math.pow(1 + discount, years);
+  totalDCF += termDCF;
+  if (termDCF > maxDCF) maxDCF = termDCF;
+
+  const rows = [];
+  data.forEach((d, i) => {
+    const barW = maxDCF > 0 ? (d.dcf / maxDCF * 100) : 0;
+    rows.push(`<tr style="animation-delay:${i*30}ms">
+      <td class="year-cell">${d.year}</td>
+      <td class="fcfe-cell">${fmt(d.fcfe)}</td>
+      <td class="dcf-cell">${fmt(d.dcf)}</td>
+      <td class="bar-col"><div class="mini-bar" style="width:${barW}%"></div></td>
+    </tr>`);
+  });
+  const termBarW = maxDCF > 0 ? (termDCF / maxDCF * 100) : 0;
+  rows.push(`<tr class="terminal-row">
+    <td class="year-cell">${currentYear + years} <span style="font-size:.7rem;opacity:.6">(TV)</span></td>
+    <td class="fcfe-cell">${fmt(terminal)}</td>
+    <td class="dcf-cell">${fmt(termDCF)}</td>
+    <td class="bar-col"><div class="mini-bar" style="width:${termBarW}%;background:linear-gradient(135deg,#22c55e,#3b82f6)"></div></td>
+  </tr>`);
+  tbody.innerHTML = rows.join('');
+  tfoot.innerHTML = `<tr>
+    <td colspan="2" style="color:var(--text-secondary)">Total Valuation</td>
+    <td class="dcf-cell" style="font-size:1.05rem">${fmt(totalDCF)}</td>
+    <td></td>
+  </tr>`;
+
+  $('dcf-valuation').textContent = fmt(totalDCF);
+  popValue($('dcf-valuation'));
+  return totalDCF;
+}
+
+function calcVC() {
+  const exitVal = parseFloat($('vc-exit').value) || 120;
+  const years = parseInt($('vc-years').value) || 5;
+  const roi = (parseFloat($('vc-roi').value) || 30) / 100;
+  const invest = parseFloat($('vc-invest').value) || 10;
+
+  const factor = Math.pow(1 + roi, years);
+  const pvExit = exitVal / factor;
+  const preMoney = pvExit - invest;
+
+  $('vc-factor-formula').innerHTML = `(1 + ${(roi*100).toFixed(0)}%)<sup>${years}</sup>`;
+  $('vc-factor').textContent = factor.toFixed(2) + 'x';
+  $('vc-pv-formula').innerHTML = `${fmt(exitVal)} &divide; ${factor.toFixed(2)}`;
+  $('vc-pv').textContent = fmt(pvExit);
+  $('vc-inv-display').textContent = fmt(invest);
+
+  const maxVal = exitVal;
+  $('vc-bar-exit').style.width = '100%';
+  $('vc-bar-pv').style.width = (maxVal > 0 ? (pvExit / maxVal * 100) : 0) + '%';
+  $('vc-bar-pre').style.width = (maxVal > 0 ? (Math.max(0, preMoney) / maxVal * 100) : 0) + '%';
+
+  const valEl = $('vc-valuation');
+  valEl.textContent = fmt(preMoney);
+  valEl.style.color = preMoney >= 0 ? 'var(--accent-amber)' : 'var(--accent-rose)';
+  popValue(valEl);
+
+  const impliedOwnership = invest / (preMoney + invest) * 100;
+  $('vc-insight').textContent = preMoney > 0
+    ? `At a pre-money of ${fmt(preMoney)}, investors would own ~${impliedOwnership.toFixed(1)}% post-money. The ${(roi*100).toFixed(0)}% target ROI implies a ${factor.toFixed(1)}x return multiple over ${years} years.`
+    : `Negative pre-money valuation indicates the target ROI of ${(roi*100).toFixed(0)}% over ${years} years cannot be achieved at the proposed exit value of ${fmt(exitVal)}.`;
+
+  return preMoney;
+}
+
+function updateComparison(dcfVal, vcVal) {
+  const maxVal = Math.max(Math.abs(dcfVal), Math.abs(vcVal), 1);
+  $('comp-bar-dcf').style.width = (Math.max(0, dcfVal) / maxVal * 100) + '%';
+  $('comp-bar-vc').style.width = (Math.max(0, vcVal) / maxVal * 100) + '%';
+  $('comp-dcf-val').textContent = fmt(dcfVal);
+  $('comp-vc-val').textContent = fmt(vcVal);
+
+  const diff = dcfVal - vcVal;
+  const absDiff = Math.abs(diff);
+  if (diff > 0) {
+    $('comp-delta').innerHTML = `DCF valuation is <span style="color:var(--accent-cyan)">${fmt(absDiff)}</span> higher than VC method (<span style="color:var(--accent-cyan)">+${((diff/Math.abs(vcVal||1))*100).toFixed(0)}%</span>)`;
+  } else if (diff < 0) {
+    $('comp-delta').innerHTML = `VC method valuation is <span style="color:var(--accent-amber)">${fmt(absDiff)}</span> higher than DCF (<span style="color:var(--accent-amber)">+${((Math.abs(diff)/Math.abs(dcfVal||1))*100).toFixed(0)}%</span>)`;
+  } else {
+    $('comp-delta').textContent = 'Both methods produce the same valuation.';
+  }
+}
+
+function recalcAll() {
+  const dcfVal = calcDCF();
+  const vcVal = calcVC();
+  updateComparison(dcfVal, vcVal);
+}
+
+document.querySelectorAll('input[type="number"]').forEach(inp => {
+  inp.addEventListener('input', recalcAll);
+});
+
+function calcFCFE() {
+  const ni = parseFloat($('fcfe-net-income').value) || 0;
+  const da = parseFloat($('fcfe-da').value) || 0;
+  const capex = parseFloat($('fcfe-capex').value) || 0;
+  const wc = parseFloat($('fcfe-wc').value) || 0;
+  const borrow = parseFloat($('fcfe-borrowing').value) || 0;
+  const fcfe = ni + da - capex - wc + borrow;
+
+  $('fcfe-vis-ni').textContent = fmt(ni);
+  $('fcfe-vis-da').textContent = fmt(da);
+  $('fcfe-vis-capex').textContent = fmt(capex);
+  $('fcfe-vis-wc').textContent = fmt(wc);
+  $('fcfe-vis-borrow').textContent = fmt(borrow);
+
+  const totalEl = $('fcfe-vis-total');
+  totalEl.textContent = fmt(fcfe);
+  totalEl.style.color = fcfe >= 0 ? 'var(--accent-green)' : 'var(--accent-rose)';
+  totalEl.classList.add('pop');
+  setTimeout(() => totalEl.classList.remove('pop'), 200);
+  return fcfe;
+}
+
+['fcfe-net-income','fcfe-da','fcfe-capex','fcfe-wc','fcfe-borrowing'].forEach(id => {
+  $(id).addEventListener('input', calcFCFE);
+});
+
+$('fcfe-apply-btn').addEventListener('click', () => {
+  const fcfe = calcFCFE();
+  const rounded = Math.round(fcfe * 100) / 100;
+  $('dcf-fcfe').value = rounded;
+  recalcAll();
+  const msg = $('fcfe-apply-msg');
+  msg.textContent = `Applied ${fmt(fcfe)} as Initial FCFE to DCF model`;
+  msg.style.opacity = '1';
+  setTimeout(() => { msg.style.opacity = '0'; }, 3000);
+  $('dcf-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+calcFCFE();
+recalcAll();
+</script>
+</body>
+</html>
